@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.mycompany.invmgtsys.Item.StorageBin;
+
 /**
  *
  * @author wonde
@@ -87,10 +89,7 @@ public class InvMgtSys {
                 case 0 ->
                     System.exit(0);
             }
-            // case 4 :display_warehouse();
-
         }
-
     }
 
     static void clearScreen() {
@@ -108,7 +107,7 @@ public class InvMgtSys {
                     return wHouse;
                 }
             }
-
+            // var ghdjfg;
             return null;
         }
     }
@@ -120,6 +119,19 @@ public class InvMgtSys {
             for (Section section : sections) {
                 if (section.section_id == sId) {
                     return section;
+                }
+            }
+            return null;
+        }
+    }
+
+    private static Item findItem(int sId) {
+        if (items.isEmpty()) {
+            return null;
+        } else {
+            for (Item item : items) {
+                if (item.item_id == sId) {
+                    return item;
                 }
             }
             return null;
@@ -161,6 +173,47 @@ public class InvMgtSys {
             sc.nextLine();
         } else {
             print("Section with such ID not found.");
+            sc.nextLine();
+        }
+    }
+
+    public static void updateItemRecord() {
+        Scanner sc = new Scanner(System.in);
+
+        print("Enter Item ID: ");
+        int itId = Integer.parseInt(sc.nextLine());
+        Item itf = findItem(itId);
+
+        if (itf != null) {
+            try {
+                print("\nUpdate Item Record:\n");
+                print("Item Id(" + itf.item_id + "):");
+                int item_id = Integer.parseInt(sc.nextLine());
+                print("Name");
+                String name = sc.nextLine();
+                print("description(" + itf.description + "):");
+                String description = sc.nextLine();
+                print("Quantity(" + itf.quantity + "):");
+                int quantity = Integer.parseInt(sc.nextLine());
+                print("Section ID: ");
+                int section_id = Integer.parseInt(sc.nextLine());
+                print("Price: ");
+                double price = sc.nextDouble();
+
+                itf.item_id = item_id;
+                itf.name = name;
+                itf.description = description;
+                itf.quantity = quantity;
+                itf.price = price;
+                itf.section_id = section_id;
+
+                print("\nItem updated successfully\n");
+            } catch (NumberFormatException e) {
+                print("Invalid input detected, Please enter again");
+            }
+            sc.nextLine();
+        } else {
+            print("Warehouse with such ID not found.");
             sc.nextLine();
         }
     }
@@ -380,6 +433,8 @@ class WareHouse {
 class Section {
 
     int section_id, max_capacity, current_occupancy, warehouse_id;
+    String aisle_name;
+    List<StorageBin> storage_bins;
 
     // String
     public Section(int section_id, int max_capacity, int current_occupancy, int warehouse_id) {
@@ -407,6 +462,14 @@ class Item {
         this.description = description;
         this.price = price;
         this.name = name;
+    }
+
+    /**
+     * StorageBin
+     */
+    public class StorageBin {
+    
+        
     }
 
 }
