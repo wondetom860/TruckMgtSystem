@@ -12,7 +12,7 @@ import java.util.List;
  * @author wonde
  */
 public class Section {
-    private int section_id, max_capacity, current_occupancy, warehouse_id;
+    private int section_id, max_capacity, current_occupancy, warehouse_id, shelf_number;
     private String aisle_name;
     private List<StorageBin> storage_bins;
 
@@ -29,6 +29,13 @@ public class Section {
         for (Section section : sections) {
             display(section);
         }
+    }
+    public int getShelfNumber() {
+        return this.shelf_number;
+    }
+
+    public void setShelfNumber(int sh_no) {
+        this.shelf_number = sh_no;
     }
 
     public int getSectionId() {

@@ -19,7 +19,7 @@ public class ItemRepository {
         items.add(item);
     }
 
-    public Item findItemById(int itemId){
+    public Item getItemById(int itemId){
         for (Item item : items) {
             if (item.getId() == itemId) {
                 return item;

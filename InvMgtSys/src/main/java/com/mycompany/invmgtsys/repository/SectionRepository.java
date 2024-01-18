@@ -13,8 +13,11 @@ import com.mycompany.invmgtsys.models.Section;
  * @author wonde
  */
 public class SectionRepository {
-    private static List<Section> sections = new ArrayList<>();
-
+    private List<Section> sections = new ArrayList<>();
+    
+    public SectionRepository(List<Section> sectionss){
+        this.sections = sectionss;
+    }
     public void addSection(Section section) {
         sections.add(section);
     }
@@ -38,7 +41,7 @@ public class SectionRepository {
 
     public void deleteSection(int sectionId){
         Section sectiontoDelete = this.getSectionById(sectionId);
-        sections.remove(sectiontoDelete);//delete Section by id
+        sections.remove(sectiontoDelete);//delete Section by object
 
         for (int i = 0; i < sections.size(); i++) {
             if (sectionId == sections.get(i).getSectionId()) {

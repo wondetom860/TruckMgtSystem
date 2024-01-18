@@ -14,6 +14,14 @@ public class Item {
     private int item_id;
     private String name, description;
 
+    public int getItem_id() {
+        return item_id;
+    }
+
+    public void setItem_id(int item_id) {
+        this.item_id = item_id;
+    }
+
     public String getName(){
         return this.name;
     }

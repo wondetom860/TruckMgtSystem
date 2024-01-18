@@ -53,6 +53,13 @@ public class WarehouseRepository {
         }
     }
 
+    public void displayWarehouse(Warehouse whf) {
+        System.out.println("\nWarehouses:");
+        System.out.println("\nWareHouse ID: " + whf.getWarehouseId());
+        System.out.println("Capacity: " + whf.getCapacity());
+        System.out.println("Location: " + whf.getLocation());
+    }
+
     public List<Warehouse> getAllWarehouses(){
         return warehouses;
     }

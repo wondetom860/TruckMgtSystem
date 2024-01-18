@@ -20,7 +20,7 @@ public class StorageBinRepository {
         storageBins.add(storageBin);
     }
 
-    public StorageBin findStorageBinById(int sbinId) {
+    public StorageBin getStorageBinById(int sbinId) {
         for (StorageBin storageBin : storageBins) {
             if (storageBin.getId() == sbinId) {
                 return storageBin;
