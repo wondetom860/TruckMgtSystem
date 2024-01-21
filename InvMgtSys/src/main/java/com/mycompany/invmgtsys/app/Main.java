@@ -1,50 +1,17 @@
-package com.mycompany.invmgtsys;
+package TruckMgtSystem.InvMgtSys.src.main.java.com.mycompany.invmgtsys.app;
 
-import java.util.Scanner;
-import com.mycompany.invmgtsys.services.*;
-import com.mycompany.invmgtsys.models.*;
-import com.mycompany.invmgtsys.repository.*;
+// import java.util.Scanner;
+// import TruckMgtSystem.InvMgtSys.src.main.java.com.mycompany.invmgtsys.services.*;
+// import TruckMgtSystem.InvMgtSys.src.main.java.com.mycompany.invmgtsys.models.*;
+// import TruckMgtSystem.InvMgtSys.src.main.java.com.mycompany.invmgtsys.repository.*;
 
-public class MainClass {
+public class Main {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        // Scanner sc = new Scanner(System.in);
         // boolean wait_for_input = false;0
 
-        InventoryService INVS = new InventoryService();
-        if (INVS.getAllWarehouses().isEmpty()) {
-            System.out.println("Warehouse list empty");
-        } else {
-            System.out.println("All Warehouses");
-            for (Warehouse warehouse : INVS.getAllWarehouses()) {
-                System.out.println("\nWarehouses:");
-                System.out.println("\nWareHouse ID: " + warehouse.getWarehouseId());
-                System.out.println("Capacity: " + warehouse.getCapacity());
-                System.out.println("Location: " + warehouse.getLocation());
-            }
-        }
-
-        Warehouse ws1 = new Warehouse();
-        ws1.setWarehouseId(1);
-        ws1.setCapacity(300);
-        ws1.setCurrentCapacity(3);
-        ws1.setLocation("Addis Abeba");
-        // ws1.set
-
-        WarehouseRepository wRepository = new WarehouseRepository();
-        wRepository.addWarehouse(ws1);
-
-        if (INVS.getAllWarehouses().isEmpty()) {
-            System.out.println("Warehouse list empty");
-        } else {
-            System.out.println("All Warehouses");
-            for (Warehouse warehouse : INVS.getAllWarehouses()) {
-                System.out.println("\nWarehouses:");
-                System.out.println("\nWareHouse ID: " + warehouse.getWarehouseId());
-                System.out.println("Capacity: " + warehouse.getCapacity());
-                System.out.println("Location: " + warehouse.getLocation());
-            }
-        }
-
+        InventoryManager inventoryManager = new InventoryManager();
+        inventoryManager.startManager();
         // while (true) {
         // clearScreen();
         // System.out.println("\nInventory Management System:");

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.invmgtsys.models;
+package TruckMgtSystem.InvMgtSys.src.main.java.com.mycompany.invmgtsys.models;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class Warehouse {
         this.sections.add(section);
     }
 
-    public void setSection(List<Section> sections){
+    public void setSections(List<Section> sections){
         this.sections = sections;
     }
 

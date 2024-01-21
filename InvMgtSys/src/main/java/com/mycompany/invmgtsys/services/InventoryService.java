@@ -2,25 +2,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.invmgtsys.services;
+package TruckMgtSystem.InvMgtSys.src.main.java.com.mycompany.invmgtsys.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.mycompany.invmgtsys.models.*;
-import com.mycompany.invmgtsys.repository.*;
+import TruckMgtSystem.InvMgtSys.src.main.java.com.mycompany.invmgtsys.models.*;
+import TruckMgtSystem.InvMgtSys.src.main.java.com.mycompany.invmgtsys.repository.*;
 
 /**
  *
  * @author wonde
  */
 public class InventoryService {
-    private ItemRepository itemRepo;
+    private ItemRepository itemRepository;
     private WarehouseRepository warehouseRepo;
-    private SectionRepository sectionRepo;
-    private StorageBinRepository stobinRepo;
+    private SectionRepository sectionR;
+    private StorageBinRepository storeBinR;
 
     public InventoryService(){
-        itemRepo = new ItemRepository();
+        itemRepository = new ItemRepository();
         warehouseRepo = new WarehouseRepository();
         // sectionRepo = new SectionRepository();
         // stobinRepo = new StorageBinRepository();
@@ -44,55 +45,116 @@ public class InventoryService {
     }
 
     // Section
-    public void addSection(Section section, Warehouse warehouse){
-
-        sectionRepo.addSection(section);
+    public void addSection(Section section, Warehouse warehouse ) {
+        SectionRepository sr = new SectionRepository(warehouse.getSections());
+        sr.addSection(section);
+        warehouse.setSections(sr.getAllSections());
+        this.updateWarehouse(warehouse);
     }
 
-    public Section getSectionById(int section_id){
-        return sectionRepo.getSectionById(section_id);
+    public Section getSectionById(int sectionId, Warehouse warehouse ) {
+        SectionRepository sr = new SectionRepository(warehouse.getSections());
+        return sr.getSectionById(sectionId);
     }
 
-    public void updateSection(Section updatedSection){
-        sectionRepo.updateSection(updatedSection);
+    public void updateSection(Section updatedSection, Warehouse warehouse  ) {
+        SectionRepository sr = new SectionRepository(warehouse.getSections());
+        sr.updateSection(updatedSection);
+        warehouse.setSections(sr.getAllSections());
+        this.updateWarehouse(warehouse);
     }
 
-    public List<Section> getAllSections(){
-        return sectionRepo.getAllSections();
+    public List<Section> getAllSections() {
+        List<Section> allSections = new ArrayList<Section>();
+        for(Warehouse w: this.getAllWarehouses()){
+            allSections.addAll(w.getSections());
+        }
+        return allSections;
     }
 
-    // StorageBin
-    public void addStorageBin(StorageBin StorageBin){
-        stobinRepo.addStorageBin(StorageBin);
+    // StorageBin Operations
+
+    public void addStorageBin(StorageBin storageBin, Section section, Warehouse warehouse) {
+        StorageBinRepository storageR = new StorageBinRepository(section.getStorageBins());
+        SectionRepository sectionR = new SectionRepository(warehouse.getSections());
+        storageR.addStorageBin(storageBin);
+        section.setStorageBins(storageR.getAllStorageBins());
+        sectionR.updateSection(section);
+        warehouse.setSections(sectionR.getAllSections());
+        this.updateWarehouse(warehouse);
     }
 
-    public StorageBin getStorageBinById(int StorageBin_id){
-        return stobinRepo.getStorageBinById(StorageBin_id);
+    public StorageBin getStorageBinById(int binId, Warehouse warehouse) {
+        
+        SectionRepository sectionR = new SectionRepository(warehouse.getSections());
+        for(Section section: warehouse.getSections()){
+            StorageBinRepository storageR = new StorageBinRepository(section.getStorageBins());
+            StorageBin sb = storageR.getStorageBinById(binId);
+            if(sb != null){
+                return sb;
+            }
+        }
+        return null;
     }
 
-    public void updateStorageBin(StorageBin updatedStorageBin){
-        stobinRepo.updateStorageBin(updatedStorageBin);
+    public void updateStorageBin(StorageBin updatedStorageBin, Section section, Warehouse warehouse) {
+        StorageBinRepository storageR = new StorageBinRepository(section.getStorageBins());
+        SectionRepository sectionR = new SectionRepository(warehouse.getSections());
+        storageR.updateStorageBin(updatedStorageBin);
+        section.setStorageBins(storageR.getAllStorageBins());
+        sectionR.updateSection(section);
+        warehouse.setSections(sectionR.getAllSections());
+        this.updateWarehouse(warehouse);
+        
     }
 
-    public List<StorageBin> getAllStorageBins(){
-        return stobinRepo.getAllStorageBins();
+    public List<StorageBin> getAllStorageBins() {
+        List<StorageBin> allStorageBins = new ArrayList<StorageBin>();
+        for(Warehouse w: this.getAllWarehouses()){
+            for(Section s: w.getSections()){
+                allStorageBins.addAll(s.getStorageBins());
+            }
+        }
+        return allStorageBins;
+        
+    }
+
+    // Item Operations
+
+    public void addItem(Item item, int quantity, Section section, Warehouse warehouse) {
+        if(this.itemRepository.getItemById(item.getId()) == null){
+            this.itemRepository.addItem(item);
+        }
+        StorageBinRepository storageR = new StorageBinRepository(section.getStorageBins());
+        SectionRepository sectionR = new SectionRepository(warehouse.getSections());
+        for(StorageBin sb: storageR.getAllStorageBins()){
+            if(sb.getId() == item.getId() && sb.getQuantity()+quantity <= sb.getMaxCapacity()){
+                sb.setQuantity(sb.getQuantity()+quantity);
+                storageR.updateStorageBin(sb);
+                section.setStorageBins(storageR.getAllStorageBins());
+                sectionR.updateSection(section);
+                warehouse.setSections(sectionR.getAllSections());
+                this.updateWarehouse(warehouse);
+            }
+        }
+        
     }
 
     // Item
     public void addItem(Item Item){
-        itemRepo.addItem(Item);
+        itemRepository.addItem(Item);
     }
 
     public Item getItemById(int Item_id){
-        return itemRepo.getItemById(Item_id);
+        return itemRepository.getItemById(Item_id);
     }
 
     public void updateItem(Item updatedItem){
-        itemRepo.updateItem(updatedItem);
+        itemRepository.updateItem(updatedItem);
     }
 
     public List<Item> getAllItems(){
-        return itemRepo.getAllItems();
+        return itemRepository.getAllItems();
     }
 
 
