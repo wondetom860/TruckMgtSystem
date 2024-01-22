@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package TruckMgtSystem.InvMgtSys.src.main.java.com.mycompany.invmgtsys.repository;
+package com.mycompany.invmgtsys.repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import TruckMgtSystem.InvMgtSys.src.main.java.com.mycompany.invmgtsys.models.Section;
+import com.mycompany.invmgtsys.models.Section;
 
 /**
  *
@@ -14,12 +14,17 @@ import TruckMgtSystem.InvMgtSys.src.main.java.com.mycompany.invmgtsys.models.Sec
  */
 public class SectionRepository {
     private List<Section> sections = new ArrayList<>();
-    
-    public SectionRepository(List<Section> sectionss){
+
+    public SectionRepository(List<Section> sectionss) {//[]
         this.sections = sectionss;
     }
+
     public void addSection(Section section) {
-        sections.add(section);
+        if (this.sections == null) {
+            this.sections.set(0, section);
+            return;
+        }
+        this.sections.add(section);
     }
 
     public Section getSectionById(int id) {
@@ -31,17 +36,17 @@ public class SectionRepository {
         return null;
     }
 
-    public void updateSection(Section updatedSection){
+    public void updateSection(Section updatedSection) {
         int updatedSectionId = updatedSection.getSectionId();
         Section updatedSectionFound = this.getSectionById(updatedSectionId);
-        if(updatedSectionFound != null){
-            sections.set(updatedSectionId,updatedSectionFound);
+        if (updatedSectionFound != null) {
+            sections.set(updatedSectionId, updatedSectionFound);
         }
     }
 
-    public void deleteSection(int sectionId){
+    public void deleteSection(int sectionId) {
         Section sectiontoDelete = this.getSectionById(sectionId);
-        sections.remove(sectiontoDelete);//delete Section by object
+        sections.remove(sectiontoDelete);// delete Section by object
 
         for (int i = 0; i < sections.size(); i++) {
             if (sectionId == sections.get(i).getSectionId()) {
@@ -50,7 +55,7 @@ public class SectionRepository {
         }
     }
 
-    public List<Section> getAllSections(){
+    public List<Section> getAllSections() {
         return sections;
     }
 }

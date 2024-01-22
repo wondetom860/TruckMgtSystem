@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package TruckMgtSystem.InvMgtSys.src.main.java.com.mycompany.invmgtsys.repository;
+package com.mycompany.invmgtsys.repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import TruckMgtSystem.InvMgtSys.src.main.java.com.mycompany.invmgtsys.models.Item;
+import com.mycompany.invmgtsys.models.Item;
 
 /**
  *
