@@ -18,6 +18,7 @@ public class InventoryManager {
             System.out.println("\nInventory Management System:");
             print("\nMenu\n");
             print("Press 1 to Register Warehouse");
+            print("Press 11 to Register Warehouse Bulk: ");
             print("Press 2 to Register Section");
             print("Press 3 to Register Item\n");
             print("Press 4 to Display All Warehouses");
@@ -59,18 +60,18 @@ public class InventoryManager {
                         showAllItems();
                         sc.nextLine();
                     }
-                    // case 7 -> {
-                    // storeWarehouseToFile();
-                    // }
+                    case 11 -> {
+                        addWarehousesBulk(sc);
+                    }
                     // case 8 -> {
                     // storeSectionToFile();
                     // }
                     // case 9 -> {
                     // storeItemToFile();
                     // }
-                    // case 10 -> {
-                    // updateWarehouseRecord();
-                    // }
+                    case 10 -> {
+                        updateWarehouseRecord(sc);
+                    }
                     // case 11 -> {
                     // updateSectionRecord();
                     // }
@@ -202,6 +203,69 @@ public class InventoryManager {
         sc.nextLine();
     }
 
+    public void updateWarehouseRecord(Scanner sc) {
+        print("Update warehouse record:");
+        print("Enter warehouse ID: ");
+        int warehouse_id = Integer.parseInt(sc.nextLine());
+        WarehouseRepository warehouseRepository = new WarehouseRepository();
+
+        Warehouse whf = warehouseRepository.getWarehouseById(warehouse_id);
+        Warehouse whn = new Warehouse();
+
+        if (whf != null) {
+            print("Warehouse ID: (" + whf.getWarehouseId() + ")");
+            whn.setWarehouseId(Integer.parseInt(sc.nextLine()));
+
+            print("Location: (" + whf.getLocation() + ")");
+            whn.setLocation(sc.nextLine());
+
+            print("Maximum Capacity: (" + whf.getMaxCapacity() + ")");
+            whn.setMaxCapacity(Integer.parseInt(sc.nextLine()));
+
+            print("Current Quantity: (" + whf.getCurrentQuantity() + ")");
+            whn.setCurrentQuantity(Integer.parseInt(sc.nextLine()));
+
+            print("Are you sure to save update? (Y/N)");
+            String ch = sc.nextLine();
+            if (ch.toUpperCase().equals("Y")) {
+                warehouseRepository.updateWarehouse(whn);
+                print("Ware house update Succesfull, Press ENTER to continue!");
+                sc.nextLine();
+                return;
+            } else {
+                print("Ware house update canceled, no change will be made to the warehouse record. press ENTER to continue!");
+                sc.nextLine();
+                return;
+            }
+        } else {
+            print("Such warehouse record does not exist!");
+            sc.nextLine();
+            return;
+        }
+
+    }
+
+    public void addWarehousesBulk(Scanner sc) {
+        sc.nextLine();
+        System.out.println("Enter Warehouses data in the following format separated by comma");
+        System.out.println("warehouseId:Location:MaxCapacity:CurrentOccupancy");
+        String warehousesData = sc.nextLine();
+        String[] warehousesDataSplitted = warehousesData.split(",");
+
+        for (String w : warehousesDataSplitted) {
+            String[] warehouseString = w.split(":");
+            Warehouse warehouse001 = new Warehouse();
+            warehouse001.setWarehouseId(Integer.parseInt(warehouseString[0]));
+            warehouse001.setLocation(warehouseString[1]);
+            warehouse001.setMaxCapacity(Integer.parseInt(warehouseString[2]));
+            warehouse001.setCurrentQuantity(Integer.parseInt(warehouseString[3]));
+
+            inventoryService.addWarehouse(warehouse001);
+
+        }
+
+    }
+
     public void registerWareHouse() {
         // String fileName = "warehouses.ser";
 
@@ -280,7 +344,7 @@ public class InventoryManager {
         System.out.println("Warehouse Maximum Capacity : \t" + warehouse.getMaxCapacity());
         System.out.println("Warehouse Current Quantity : \t" + warehouse.getCurrentQuantity());
         System.out.println("Warehouse has " + (warehouse.getSections() != null ? warehouse.getSections().size() : 0)
-                + " Sections,["+warehouse.getSectionsIds().toString()+"]");
+                + " Sections,[" + warehouse.getSectionsIds().toString() + "]");
         print("______________________________________");
 
     }

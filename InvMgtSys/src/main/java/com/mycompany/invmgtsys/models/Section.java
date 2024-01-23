@@ -7,6 +7,8 @@ package com.mycompany.invmgtsys.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mycompany.invmgtsys.repository.WarehouseRepository;
+
 /**
  *
  * @author wonde
@@ -69,6 +71,19 @@ public class Section {
     // private Section findById(int section_id){
 
     // }
+
+    public int getWarehouseId(int section_id){
+        WarehouseRepository whr = new WarehouseRepository();
+        for (Warehouse warehouse : whr.getAllWarehouses()) {
+            for (Section section : warehouse.getSections()) {
+                if(section.getSectionId() == section_id){
+                    return warehouse.getWarehouseId();
+                }
+            }
+        }
+
+        return 0;
+    }
 
     public int getWarehouseId() {
         return this.warehouse_id;
