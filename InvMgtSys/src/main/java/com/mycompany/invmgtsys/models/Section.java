@@ -13,25 +13,31 @@ import com.mycompany.invmgtsys.repository.WarehouseRepository;
  *
  * @author wonde
  */
-public class Section {
+public class Section extends InventoryComponent {
     private int section_id, max_capacity, current_occupancy, warehouse_id, shelf_number;
     private String aisle_name;
     private List<StorageBin> storage_bins;
 
-    public void display(Section section) {
-        System.out.println("");
-        System.out.println("Warehouse ID:\t" + section.warehouse_id);
-        System.out.println("Section ID:\t" + section.section_id);
-        System.out.println("Max. Capacity:\t" + section.max_capacity);
-        System.out.println("Current Occupancy:\t" + section.current_occupancy);
-        System.out.println("");
+    public String format = "%-40s%s%n";
+
+    @Override
+    public void display() {
+        System.out.printf(format, "Warehouse ID :", this.getWarehouseId());
+        System.out.printf(format, "Aisle Name :", this.getAisleName());
+        System.out.printf(format, "Max. Capacity : ", this.getMaxCapacity());
+        System.out.printf(format, "Current Capacity : ", this.getCurrentCapacity());
+        System.out.printf(format, "Maximum Capacity : ", this.getMaxCapacity());
+        System.out.printf(format, "Storage Bins Count : " , (this.getStorageBins() != null ? this.getStorageBins().size() : 0));
     }
 
     public void displayAll(ArrayList<Section> sections) {
         for (Section section : sections) {
-            display(section);
+            System.out.println("_______________________________________");
+            section.display();
         }
+        System.out.println("_______________________________________");
     }
+
     public int getShelfNumber() {
         return this.shelf_number;
     }
@@ -72,11 +78,11 @@ public class Section {
 
     // }
 
-    public int getWarehouseId(int section_id){
+    public int getWarehouseId(int section_id) {
         WarehouseRepository whr = new WarehouseRepository();
         for (Warehouse warehouse : whr.getAllWarehouses()) {
             for (Section section : warehouse.getSections()) {
-                if(section.getSectionId() == section_id){
+                if (section.getSectionId() == section_id) {
                     return warehouse.getWarehouseId();
                 }
             }
@@ -110,6 +116,6 @@ public class Section {
     }
 
     public List<StorageBin> getStorageBins() {
-        return storage_bins;
+        return this.storage_bins == null ? new ArrayList<StorageBin>() : this.storage_bins;
     }
 }

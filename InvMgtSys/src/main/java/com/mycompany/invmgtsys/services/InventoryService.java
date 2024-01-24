@@ -89,6 +89,7 @@ public class InventoryService {
         SectionRepository sectionR = new SectionRepository(warehouse.getSections());
         storageR.addStorageBin(storageBin);
         section.setStorageBins(storageR.getAllStorageBins());
+
         sectionR.updateSection(section);
         warehouse.setSections(sectionR.getAllSections());
         this.updateWarehouse(warehouse);

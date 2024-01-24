@@ -15,7 +15,7 @@ import com.mycompany.invmgtsys.models.Section;
 public class SectionRepository {
     private List<Section> sections = new ArrayList<>();
 
-    public SectionRepository(List<Section> sectionss) {//[]
+    public SectionRepository(List<Section> sectionss) {// []
         this.sections = sectionss;
     }
 
@@ -28,19 +28,24 @@ public class SectionRepository {
     }
 
     public Section getSectionById(int id) {
-        for (Section section : sections) {
-            if (section.getSectionId() == id) {
-                return section;
+        // for (Section section : sections) {
+        // if (section.getSectionId() == id) {
+        // return section;
+        // }
+        // }
+        for (int i = 0; i < sections.size(); i++) {
+            if (sections.get(i).getSectionId() == id) {
+                return sections.get(i);
             }
         }
         return null;
     }
 
     public void updateSection(Section updatedSection) {
-        int updatedSectionId = updatedSection.getSectionId();
-        Section updatedSectionFound = this.getSectionById(updatedSectionId);
-        if (updatedSectionFound != null) {
-            sections.set(updatedSectionId, updatedSectionFound);
+        for (int i = 0; i < sections.size(); i++) {
+            if (sections.get(i).getSectionId() == updatedSection.getSectionId()) {
+                sections.set(i, updatedSection);
+            }
         }
     }
 

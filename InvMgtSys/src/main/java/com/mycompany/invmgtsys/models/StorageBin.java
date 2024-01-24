@@ -10,30 +10,54 @@ import java.util.ArrayList;
  *
  * @author wonde
  */
-public class StorageBin {
-    private int bin_id, section_id, item_id, quantity, max_capacity;
+public class StorageBin extends InventoryComponent{
+    private int bin_id, section_id, item_id, quantity, max_capacity,shelf_number;
 
-    public void display(StorageBin bin){
-        System.out.println("");
-        System.out.println("Section ID:\t"+bin.section_id);//this should display section description   => bin.getSection()
-        System.out.println("Bin ID:\t"+bin.bin_id);
-        System.out.println("Item ID:\t"+bin.item_id);
-        System.out.println("Quantity:\t"+bin.quantity);
-        System.out.println("Max Capacity:\t"+bin.max_capacity);
-        System.out.println("");
+    public String format = "%-40s%s%n";
+    // public void display(StorageBin bin) {
+    //     System.out.println("");
+    //     System.out.println("Section ID:\t" + bin.section_id);// this should display section description =>
+    //                                                          // bin.getSection()
+    //     System.out.println("Bin ID:\t" + bin.bin_id);
+    //     System.out.println("Item ID:\t" + bin.item_id);
+    //     System.out.println("Quantity:\t" + bin.quantity);
+    //     System.out.println("Max Capacity:\t" + bin.max_capacity);
+    //     System.out.println("");
+    // }
+
+    public int getShelfNumber() {
+        return shelf_number;
+    }
+
+    public void setShelfNumber(int shelf_number) {
+        this.shelf_number = shelf_number;
+    }
+
+    public StorageBin() {
+    }
+
+    // StorageBin(section_id, sbin_id,item_id, quantity, max_capacity,shelf_number)
+    public StorageBin(int section_id, int sbin_id, int item_id, int quantity, int max_capacity, int shelf_number) {
+        this.section_id = section_id;
+        this.item_id = item_id;
+        this.bin_id = sbin_id;
+        this.quantity = quantity;
+        this.max_capacity = max_capacity;
+        this.shelf_number = shelf_number;
     }
 
     // private Section getSection(){
-    //     Section sectionObject = new Section();
-    //     sectionObject = sectionObject.getSectionById(this.section_id);
-        
+    // Section sectionObject = new Section();
+    // sectionObject = sectionObject.getSectionById(this.section_id);
+
     // }
 
-    public void displayAll(ArrayList<StorageBin> bins){
+    public void displayAll(ArrayList<StorageBin> bins) {
         for (StorageBin bin : bins) {
-            display(bin);
+            bin.display();
         }
     }
+
     public void setId(int id) {
         this.bin_id = id;
     }
@@ -72,5 +96,15 @@ public class StorageBin {
 
     public int getMaxCapacity() {
         return this.max_capacity;
+    }
+
+    @Override
+    public void display(){
+        System.out.printf(format,"Section ID: " , this.getSectionId());
+        System.out.printf(format,"Sbin ID: " , this.getId());
+        System.out.printf(format,"Item ID: " , this.getItemId());
+        System.out.printf(format,"Shelf Number: " , this.getShelfNumber());
+        System.out.printf(format,"Quantity: " , this.getQuantity());
+        System.out.printf(format,"Max Capacity: " , this.getMaxCapacity());
     }
 }

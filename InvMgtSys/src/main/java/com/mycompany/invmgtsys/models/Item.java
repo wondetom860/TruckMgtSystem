@@ -10,9 +10,10 @@ import java.util.ArrayList;
  *
  * @author wonde
  */
-public class Item {
+public class Item extends InventoryComponent{
     private int item_id;
     private String name, description;
+    public String format = "%-40s%s%n";
 
     public int getItem_id() {
         return item_id;
@@ -45,17 +46,19 @@ public class Item {
         return this.description;
     }
 
-    public void display(Item item){
-        System.out.println("");
-        System.out.println("Item Name:\t"+item.name);
-        System.out.println("Item ID:\t"+item.item_id);
-        System.out.println("Description:\t"+item.description);
-        System.out.println("");
+    @Override
+    public void display(){
+        super.display();
+        System.out.printf(format,"Item Name:",this.name);
+        System.out.printf(format,"Item ID:",this.item_id);
+        System.out.printf(format,"Description:",this.description);
     }
 
     public void displayAll(ArrayList<Item> items){
         for (Item item : items) {
-            display(item);
+            System.out.println("_________________________________");
+            item.display();
         }
+        System.out.println("_________________________________");
     }
 }

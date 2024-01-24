@@ -1,15 +1,18 @@
 package com.mycompany.invmgtsys.app;
 
+import java.util.List;
 import java.util.Scanner;
 
 import com.mycompany.invmgtsys.models.*;
-import com.mycompany.invmgtsys.repository.ItemRepository;
+// import com.mycompany.invmgtsys.repository.ItemRepository;
 import com.mycompany.invmgtsys.repository.SectionRepository;
+// import com.mycompany.invmgtsys.repository.StorageBinRepository;
 import com.mycompany.invmgtsys.repository.WarehouseRepository;
 import com.mycompany.invmgtsys.services.InventoryService;
 
 public class InventoryManager {
     InventoryService inventoryService = new InventoryService();
+    InventoryComponent ic = new InventoryComponent();
     Scanner sc = new Scanner(System.in);
 
     public void startManager() {
@@ -21,17 +24,18 @@ public class InventoryManager {
             print("Press 11 to Register Warehouse Bulk: ");
             print("Press 2 to Register Section");
             print("Press 3 to Register Item\n");
+            print("Press 7 to Register Storage Bin\n");
             print("Press 4 to Display All Warehouses");
             print("Press 5 to Display All Sections");
             print("Press 55 to Display All Sections by Warehouse");
             print("Press 6 to Display All Items\n");
             // print("Press 7 to Store Warehouse to file");
-            // print("Press 8 to Store Section to file");
+            print("Press 8 to Display All Storage Bins");
             // print("Press 9 to Store Item to file\n");
             print("Enter 10 to Update WareHouse record");
             print("Enter 11 to Update Section record");
             print("Enter 12 to Update Item record\n");
-            // print("Press 7 to Display All");
+            print("Press 13 to Update Storage Bin");
             print("Press 0 to quite\n\nChoice: ");
 
             // if (!(sc.hasNextInt())) {// check if the input has int
@@ -56,6 +60,10 @@ public class InventoryManager {
                         showAllSections();
                         sc.nextLine();
                     }
+                    case 55 -> {
+                        showAllSectionsByWarehouse(sc);
+                        sc.nextLine();
+                    }
                     case 6 -> {
                         showAllItems();
                         sc.nextLine();
@@ -63,18 +71,18 @@ public class InventoryManager {
                     case 11 -> {
                         addWarehousesBulk(sc);
                     }
-                    // case 8 -> {
-                    // storeSectionToFile();
-                    // }
-                    // case 9 -> {
-                    // storeItemToFile();
-                    // }
+                    case 8 -> {
+                        displayAllStorageBins();
+                    }
+                    case 13 -> {
+                        updateStorageBin(sc);
+                    }
                     case 10 -> {
                         updateWarehouseRecord(sc);
                     }
-                    // case 11 -> {
-                    // updateSectionRecord();
-                    // }
+                    case 7 -> {
+                        registerStorageBin(sc);
+                    }
                     case 0 ->
                         System.exit(0);
                 }
@@ -119,11 +127,138 @@ public class InventoryManager {
         // }
     }
 
+    public void printInventoryComponent(InventoryComponent ic){
+        ic.display();
+    }
+
+    public void updateStorageBin(Scanner sc) {
+        print("Update Storage Bin");
+        print("Enter Warehouse ID: ");
+        int warehosue_id = Integer.parseInt(sc.nextLine());
+        Warehouse warehouse = inventoryService.getWarehouseById(warehosue_id);
+        if (warehouse == null) {
+            print("No such warehouse found, please enter again.");
+            sc.nextLine();
+            return;
+        }
+
+        print("Enter Section ID: ");
+        int section_id = Integer.parseInt(sc.nextLine());
+        Section section = inventoryService.getSectionById(section_id, warehouse);
+        if (section == null) {
+            print("No such section found in selected warehouse, please enter again.");
+            sc.nextLine();
+            return;
+        }
+
+        print("Enter Storage Bin ID: ");
+        int sbinId = Integer.parseInt(sc.nextLine());
+        StorageBin sbin = inventoryService.getStorageBinById(sbinId, warehouse);
+
+        if (sbin == null) {
+            print("No such Storage bin info found, please enter again.");
+            sc.nextLine();
+            return;
+        }
+
+        try {
+            print("Bin ID: (" + sbin.getId() + "): ");
+            sbin.setId(Integer.parseInt(sc.nextLine()));
+
+            print("Shelf Number: (" + sbin.getShelfNumber() + "): ");
+            sbin.setShelfNumber(Integer.parseInt(sc.nextLine()));
+
+            print("Item ID: (" + sbin.getItemId() + "): ");
+            sbin.setItemId(Integer.parseInt(sc.nextLine()));
+
+            print("Quantity: (" + sbin.getQuantity() + "): ");
+            sbin.setQuantity(Integer.parseInt(sc.nextLine()));
+
+            print("Max Capacity: (" + sbin.getMaxCapacity() + "): ");
+            sbin.setMaxCapacity(Integer.parseInt(sc.nextLine()));
+
+            inventoryService.updateStorageBin(sbin, section, warehouse);
+            print("Storage bin updated succeffully.");
+            this.printInventoryComponent(sbin);
+        } catch (Exception e) {
+            print("Invalid input, please enter again.");
+            e.printStackTrace();
+            sc.nextLine();
+            return;
+        }
+    }
+
+    public void displayStorageBin(StorageBin sbin) {
+        print("Section ID: " + sbin.getSectionId());
+        print("Sbin ID: " + sbin.getId());
+        print("Item ID: " + sbin.getItemId());
+        print("Shelf Number: " + sbin.getShelfNumber());
+        print("Quantity: " + sbin.getQuantity());
+        print("Max Capacity: " + sbin.getMaxCapacity());
+    }
+
+    public void registerStorageBin(Scanner sc) {
+        print("Register New Storage Bin");
+        print("Enter Warehouse ID: ");
+        int warehouse_id = Integer.parseInt(sc.nextLine());
+
+        WarehouseRepository warehouseRepository = new WarehouseRepository();
+        Warehouse warehouse = warehouseRepository.getWarehouseById(warehouse_id);
+
+        if (warehouse == null) {
+            print("No such Warehouse found!");
+            return;
+        }
+        print("Section ID: ");
+        int section_id = Integer.parseInt(sc.nextLine());
+        SectionRepository sectionRepository = new SectionRepository(warehouse.getSections());
+        Section section = sectionRepository.getSectionById(section_id);
+
+        if (section == null) {
+            print("No such Section found!");
+            sc.nextLine();// wait for keyboard press
+            return;
+        }
+        // sbin.setSectionId(section_id);
+
+        try {
+            print("Storage Bin Id: ");
+            int sbin_id = Integer.parseInt(sc.nextLine());
+            // sbin.setItemId(sbin_id);
+
+            print("Item Id: ");
+            int item_id = Integer.parseInt(sc.nextLine());
+
+            print("Quantity: ");
+            int quantity = Integer.parseInt(sc.nextLine());
+            // sbin.setQuantity(quantity);
+
+            print("Max Capacity: ");
+            int max_capacity = Integer.parseInt(sc.nextLine());
+
+            print("Shelf Number: ");
+            int shelf_number = Integer.parseInt(sc.nextLine());
+            // sbin.setMaxCapacity(max_capacity);
+
+            StorageBin sbin = new StorageBin(section_id, sbin_id, item_id, quantity, max_capacity, shelf_number);
+            inventoryService.addStorageBin(sbin, section, warehouse);
+
+            print("StorageBin registered successfully. press ENTER to continue");
+            sc.nextLine();
+            return;
+        } catch (Exception e) {
+            print("Invalid input, please enter again");
+            e.printStackTrace();
+            sc.nextLine();
+            return;
+        }
+    }
+
+    // private boolean
+
     public void registerItem() {
         Scanner sc = new Scanner(System.in);
-        // WareHouse wh;
         try {
-
             // Item item, int quantity, Section section, Warehouse warehouse
             Item item = new Item();
 
@@ -259,9 +394,7 @@ public class InventoryManager {
             warehouse001.setLocation(warehouseString[1]);
             warehouse001.setMaxCapacity(Integer.parseInt(warehouseString[2]));
             warehouse001.setCurrentQuantity(Integer.parseInt(warehouseString[3]));
-
             inventoryService.addWarehouse(warehouse001);
-
         }
 
     }
@@ -286,22 +419,24 @@ public class InventoryManager {
             sc.nextLine();
 
             inventoryService.addWarehouse(warehouse001);
-
-            // print("Warehouse Id: ");
-            // int warehouse_id = Integer.parseInt(sc.nextLine());
-            // print("Capacity: ");
-            // int capacity = Integer.parseInt(sc.nextLine());
-            // print("Location");
-            // String location = sc.nextLine();
-            // print("Sections Count: ");
-            // int sections_count = Integer.parseInt(sc.nextLine());
-            // WareHouse wh = new WareHouse(warehouse_id, capacity, sections_count,
-            // location);
-            // warehouses.add(wh);
             print("\nWare house registered successfully\n");
         } catch (NumberFormatException e) {
             print("Invalid input detected, Please enter again");
         }
+        sc.nextLine();
+    }
+
+    public void displayAllStorageBins() {
+        if (!inventoryService.getAllStorageBins().isEmpty()) {
+            print("______________________________________");
+            for (StorageBin sbin : inventoryService.getAllStorageBins()) {
+                displayStorageBin(sbin);
+                print("______________________________________");
+            }
+        } else {
+            System.out.println("You don't have any item");
+        }
+
         sc.nextLine();
     }
 
@@ -318,42 +453,31 @@ public class InventoryManager {
     }
 
     public void displayItem(Item item) {
-        // int[] itemWarehouseIds =
-        // inventoryService.getItemWarehouseIds(item.getItem_id());
-        // System.out.println("Warehouse IDs : \t" + itemWarehouseIds.toString());
-        System.out.println("Item ID : \t" + item.getId());
-        System.out.println("Name : \t\t" + item.getName());
-        System.out.println("Description: \t" + item.getDescription());
+        item.display();
     }
 
     public void showAllWareHouses() {
-        if (!inventoryService.getAllWarehouses().isEmpty()) {
-            print("______________________________________");
+        List<Warehouse> warehouses = inventoryService.getAllWarehouses();
+        if (!warehouses.isEmpty()) {
+            // ic.displayMultiple((List<InventoryComponent>)warehouses);
             for (Warehouse warehouse : inventoryService.getAllWarehouses()) {
-                displayWareHouse(warehouse);
+                print("______________________________________");
+                warehouse.display();
             }
+            print("______________________________________");
         } else {
             System.out.println("You don't have any warehouses");
         }
     }
 
-    public void displayWareHouse(Warehouse warehouse) {
-        // int [] sectioniDs = ;
-        System.out.println("Warehouse ID : \t" + warehouse.getWarehouseId());
-        System.out.println("Warehouse Location : \t" + warehouse.getLocation());
-        System.out.println("Warehouse Maximum Capacity : \t" + warehouse.getMaxCapacity());
-        System.out.println("Warehouse Current Quantity : \t" + warehouse.getCurrentQuantity());
-        System.out.println("Warehouse has " + (warehouse.getSections() != null ? warehouse.getSections().size() : 0)
-                + " Sections,[" + warehouse.getSectionsIds().toString() + "]");
-        print("______________________________________");
-
-    }
-
-    public void showAllSectionsByWarehouse(int warehouse_id) {
+    public void showAllSectionsByWarehouse(Scanner sc) {
+        int warehouse_id = Integer.parseInt(sc.nextLine());
         if (!inventoryService.getAllSectionsByWarehouse(warehouse_id).isEmpty()) {
             for (Section section : inventoryService.getAllSectionsByWarehouse(warehouse_id)) {
-                displaySection(section);
+                print("______________________________________");
+                section.display();
             }
+            print("______________________________________");
         } else {
             System.out.println("You don't have any section");
         }
@@ -363,23 +487,17 @@ public class InventoryManager {
         if (!inventoryService.getAllSections().isEmpty()) {
             print("______________________________________");
             for (Section section : inventoryService.getAllSections()) {
-                displaySection(section);
+                print("______________________________________");
+                section.display();
             }
+            print("______________________________________");
         } else {
             System.out.println("You don't have any section");
         }
     }
 
     public void displaySection(Section section) {
-
-        System.out.println("Warehouse ID : \t" + section.getWarehouseId());
-        System.out.println("Aisle Name : \t" + section.getAisleName());
-        System.out.println("Max. Capacity : \t" + section.getMaxCapacity());
-        System.out.println("Current Capacity : \t" + section.getCurrentCapacity());
-        System.out.println("Maximum Capacity : " + section.getMaxCapacity());
-        System.out.println("Section has " + (section.getStorageBins() != null ? section.getStorageBins().size() : 0)
-                + " Storage Bins");
-        print("______________________________________");
+        section.display();
     }
 
     static void clearScreen() {

@@ -15,10 +15,16 @@ import com.mycompany.invmgtsys.models.StorageBin;
  */
 public class StorageBinRepository {
     private List<StorageBin> storageBins = new ArrayList<>();
+
     public StorageBinRepository(List<StorageBin> storageBins) {
         this.storageBins = storageBins;
     }
+
     public void addStorageBin(StorageBin storageBin) {
+        if (this.storageBins == null) {
+            this.storageBins.set(0,storageBin);
+            return;
+        }
         storageBins.add(storageBin);
     }
 
@@ -63,6 +69,6 @@ public class StorageBinRepository {
     }
 
     public List<StorageBin> getAllStorageBins() {
-        return storageBins;
+        return storageBins == null ? new ArrayList<StorageBin>() : this.storageBins;
     }
 }
