@@ -29,6 +29,10 @@ public class ItemRepository {
         return null;
     }
 
+    public int getId(Item item){
+        return item.getId();
+    }
+
     public void updateItem(Item updatedItem){
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).getId() == updatedItem.getId()) {

@@ -10,7 +10,7 @@ import java.util.ArrayList;
  *
  * @author wonde
  */
-public class Item extends InventoryComponent{
+public class Item extends InventoryComponent {
     private int item_id;
     private String name, description;
     public String format = "%-40s%s%n";
@@ -19,42 +19,53 @@ public class Item extends InventoryComponent{
         return item_id;
     }
 
+    public Item() {
+    }
+
+    public Item(int item_id, String name, String desc) {
+        this.item_id = item_id;
+        this.name = name;
+        this.description = desc;
+    }
+
     public void setItem_id(int item_id) {
         this.item_id = item_id;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
-    public void setName(String name){
+
+    public void setName(String name) {
         this.name = name;
     }
 
-    public void setId(int id){
+    public void setId(int id) {
         this.item_id = id;
     }
 
-    public int getId(){
+    @Override
+    public int getId() {
         return this.item_id;
     }
 
-    public void setDescription(String desc){
+    public void setDescription(String desc) {
         this.description = desc;
     }
 
-    public String getDescription(){
+    public String getDescription() {
         return this.description;
     }
 
     @Override
-    public void display(){
-        super.display();
-        System.out.printf(format,"Item Name:",this.name);
-        System.out.printf(format,"Item ID:",this.item_id);
-        System.out.printf(format,"Description:",this.description);
+    public void display() {
+        // super.display();
+        System.out.printf(format, "Item Name:", this.name);
+        System.out.printf(format, "Item ID:", this.item_id);
+        System.out.printf(format, "Description:", this.description);
     }
 
-    public void displayAll(ArrayList<Item> items){
+    public void displayAll(ArrayList<Item> items) {
         for (Item item : items) {
             System.out.println("_________________________________");
             item.display();

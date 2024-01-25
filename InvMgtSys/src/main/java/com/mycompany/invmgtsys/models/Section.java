@@ -23,11 +23,13 @@ public class Section extends InventoryComponent {
     @Override
     public void display() {
         System.out.printf(format, "Warehouse ID :", this.getWarehouseId());
+        System.out.printf(format, "Section ID :", this.getSectionId());
         System.out.printf(format, "Aisle Name :", this.getAisleName());
         System.out.printf(format, "Max. Capacity : ", this.getMaxCapacity());
         System.out.printf(format, "Current Capacity : ", this.getCurrentCapacity());
         System.out.printf(format, "Maximum Capacity : ", this.getMaxCapacity());
-        System.out.printf(format, "Storage Bins Count : " , (this.getStorageBins() != null ? this.getStorageBins().size() : 0));
+        System.out.printf(format, "Storage Bins Count : ",
+                (this.getStorageBins() != null ? this.getStorageBins().size() : 0));
     }
 
     public void displayAll(ArrayList<Section> sections) {
@@ -52,6 +54,11 @@ public class Section extends InventoryComponent {
 
     public void setSectionId(int id) {
         this.section_id = id;
+    }
+
+    @Override
+    public int getId() {
+        return this.getSectionId();
     }
 
     public void setMaxCapacity(int max_capacity) {

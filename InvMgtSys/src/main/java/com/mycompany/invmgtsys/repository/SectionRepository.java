@@ -27,6 +27,10 @@ public class SectionRepository {
         this.sections.add(section);
     }
 
+    public int getId(Section section){
+        return section.getId();
+    }
+
     public Section getSectionById(int id) {
         // for (Section section : sections) {
         // if (section.getSectionId() == id) {

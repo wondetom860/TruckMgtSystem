@@ -1,6 +1,6 @@
 package com.mycompany.invmgtsys.app;
 
-import com.mycompany.invmgtsys.models.*;
+// import com.mycompany.invmgtsys.models.*;
 // import com.mycompany.invmgtsys.models.Warehouse;
 
 // import java.util.Scanner;

@@ -12,7 +12,7 @@ import com.mycompany.invmgtsys.models.Warehouse;
  * @author wonde
  */
 public class WarehouseRepository {
-    private static List<Warehouse> warehouses = new ArrayList<>();
+    public static List<Warehouse> warehouses = new ArrayList<>();
 
     public void addWarehouse(Warehouse warehouse){
         warehouses.add(warehouse);
@@ -21,6 +21,14 @@ public class WarehouseRepository {
     // public static Warehouse findWarehouse(int warehouse_id){
     //     return getWarehouseById(warehouse_id);
     // }
+
+    public int getId(Warehouse wh){
+        return wh.getWarehouseId();
+    }
+
+    public Warehouse getById(int id){
+        return this.getWarehouseById(id);
+    }
 
     public Warehouse getWarehouseById(int id){
         for (Warehouse warehouse : warehouses) {

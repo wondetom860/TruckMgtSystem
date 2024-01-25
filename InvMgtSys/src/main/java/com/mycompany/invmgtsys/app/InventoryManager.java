@@ -1,5 +1,9 @@
 package com.mycompany.invmgtsys.app;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -12,7 +16,7 @@ import com.mycompany.invmgtsys.services.InventoryService;
 
 public class InventoryManager {
     InventoryService inventoryService = new InventoryService();
-    InventoryComponent ic = new InventoryComponent();
+    InventoryComponent ic;
     Scanner sc = new Scanner(System.in);
 
     public void startManager() {
@@ -29,7 +33,7 @@ public class InventoryManager {
             print("Press 5 to Display All Sections");
             print("Press 55 to Display All Sections by Warehouse");
             print("Press 6 to Display All Items\n");
-            // print("Press 7 to Store Warehouse to file");
+            print("Press 77 to Store Warehouse to file");
             print("Press 8 to Display All Storage Bins");
             // print("Press 9 to Store Item to file\n");
             print("Enter 10 to Update WareHouse record");
@@ -80,6 +84,9 @@ public class InventoryManager {
                     case 10 -> {
                         updateWarehouseRecord(sc);
                     }
+                    case 77 -> {
+                        warehousesDataSplitted(sc);
+                    }
                     case 7 -> {
                         registerStorageBin(sc);
                     }
@@ -91,43 +98,25 @@ public class InventoryManager {
                 continue;
             }
         }
-
-        // if (INVS.getAllWarehouses().isEmpty()) {
-        // System.out.println("Warehouse list empty");
-        // } else {
-        // System.out.println("All Warehouses");
-        // for (Warehouse warehouse : INVS.getAllWarehouses()) {
-        // System.out.println("\nWarehouses:");
-        // System.out.println("\nWareHouse ID: " + warehouse.getWarehouseId());
-        // System.out.println("Capacity: " + warehouse.getCapacity());
-        // System.out.println("Location: " + warehouse.getLocation());
-        // }
-        // }
-
-        // Warehouse ws1 = new Warehouse();
-        // ws1.setWarehouseId(1);
-        // ws1.setCapacity(300);
-        // ws1.setCurrentCapacity(3);
-        // ws1.setLocation("Addis Abeba");
-        // // ws1.set
-
-        // WarehouseRepository wRepository = new WarehouseRepository();
-        // wRepository.addWarehouse(ws1);
-
-        // if (INVS.getAllWarehouses().isEmpty()) {
-        // System.out.println("Warehouse list empty");
-        // } else {
-        // System.out.println("All Warehouses");
-        // for (Warehouse warehouse : INVS.getAllWarehouses()) {
-        // System.out.println("\nWarehouses:");
-        // System.out.println("\nWareHouse ID: " + warehouse.getWarehouseId());
-        // System.out.println("Capacity: " + warehouse.getCapacity());
-        // System.out.println("Location: " + warehouse.getLocation());
-        // }
-        // }
     }
 
-    public void printInventoryComponent(InventoryComponent ic){
+    public void warehousesDataSplitted(Scanner sc) {
+        String path = "warehouse.csv";
+        List<Warehouse> warehouses = inventoryService.getAllWarehouses();
+        if (warehouses.size() > 0) {
+            try {
+                FileReader fileReader = new FileReader(path);
+                BufferedReader bfreader = new BufferedReader(fileReader);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            print("Warehouse list empty!");
+        }
+    }
+
+    public void printInventoryComponent(InventoryComponent ic) {
         ic.display();
     }
 
@@ -460,7 +449,7 @@ public class InventoryManager {
         List<Warehouse> warehouses = inventoryService.getAllWarehouses();
         if (!warehouses.isEmpty()) {
             // ic.displayMultiple((List<InventoryComponent>)warehouses);
-            for (Warehouse warehouse : inventoryService.getAllWarehouses()) {
+            for (Warehouse warehouse : warehouses) {
                 print("______________________________________");
                 warehouse.display();
             }

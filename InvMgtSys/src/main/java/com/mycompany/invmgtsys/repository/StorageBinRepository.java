@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mycompany.invmgtsys.models.StorageBin;
+import com.mycompany.invmgtsys.models.Warehouse;
 
 /**
  *
@@ -35,6 +36,10 @@ public class StorageBinRepository {
             }
         }
         return null;
+    }
+
+    public int getId(StorageBin sbin){
+        return sbin.getId();
     }
 
     public void updateStorageBin(StorageBin updatedStorageBin) {

@@ -10,19 +10,20 @@ import java.util.ArrayList;
  *
  * @author wonde
  */
-public class StorageBin extends InventoryComponent{
-    private int bin_id, section_id, item_id, quantity, max_capacity,shelf_number;
+public class StorageBin extends InventoryComponent {
+    private int bin_id, section_id, item_id, quantity, max_capacity, shelf_number;
 
     public String format = "%-40s%s%n";
     // public void display(StorageBin bin) {
-    //     System.out.println("");
-    //     System.out.println("Section ID:\t" + bin.section_id);// this should display section description =>
-    //                                                          // bin.getSection()
-    //     System.out.println("Bin ID:\t" + bin.bin_id);
-    //     System.out.println("Item ID:\t" + bin.item_id);
-    //     System.out.println("Quantity:\t" + bin.quantity);
-    //     System.out.println("Max Capacity:\t" + bin.max_capacity);
-    //     System.out.println("");
+    // System.out.println("");
+    // System.out.println("Section ID:\t" + bin.section_id);// this should display
+    // section description =>
+    // // bin.getSection()
+    // System.out.println("Bin ID:\t" + bin.bin_id);
+    // System.out.println("Item ID:\t" + bin.item_id);
+    // System.out.println("Quantity:\t" + bin.quantity);
+    // System.out.println("Max Capacity:\t" + bin.max_capacity);
+    // System.out.println("");
     // }
 
     public int getShelfNumber() {
@@ -62,6 +63,7 @@ public class StorageBin extends InventoryComponent{
         this.bin_id = id;
     }
 
+    @Override
     public int getId() {
         return this.bin_id;
     }
@@ -99,12 +101,12 @@ public class StorageBin extends InventoryComponent{
     }
 
     @Override
-    public void display(){
-        System.out.printf(format,"Section ID: " , this.getSectionId());
-        System.out.printf(format,"Sbin ID: " , this.getId());
-        System.out.printf(format,"Item ID: " , this.getItemId());
-        System.out.printf(format,"Shelf Number: " , this.getShelfNumber());
-        System.out.printf(format,"Quantity: " , this.getQuantity());
-        System.out.printf(format,"Max Capacity: " , this.getMaxCapacity());
+    public void display() {
+        System.out.printf(format, "Section ID: ", this.getSectionId());
+        System.out.printf(format, "Sbin ID: ", this.getId());
+        System.out.printf(format, "Item ID: ", this.getItemId());
+        System.out.printf(format, "Shelf Number: ", this.getShelfNumber());
+        System.out.printf(format, "Quantity: ", this.getQuantity());
+        System.out.printf(format, "Max Capacity: ", this.getMaxCapacity());
     }
 }
