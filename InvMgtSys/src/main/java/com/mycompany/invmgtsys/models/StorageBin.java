@@ -12,7 +12,10 @@ import java.util.ArrayList;
  */
 public class StorageBin extends InventoryComponent {
     private int bin_id, section_id, item_id, quantity, max_capacity, shelf_number;
-
+    @Override
+    public String implodeString() {
+        return this.getId()+","+this.getSectionId()+","+this.getItemId()+","+this.getQuantity()+","+this.getMaxCapacity()+","+this.getShelfNumber();
+    }
     public String format = "%-40s%s%n";
     // public void display(StorageBin bin) {
     // System.out.println("");

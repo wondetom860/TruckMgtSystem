@@ -13,18 +13,18 @@ import com.mycompany.invmgtsys.models.Section;
  * @author wonde
  */
 public class SectionRepository {
-    private List<Section> sections = new ArrayList<>();
+    public static List<Section> sections = new ArrayList<>();
 
     public SectionRepository(List<Section> sectionss) {// []
-        this.sections = sectionss;
+        sections = sectionss;
     }
 
     public void addSection(Section section) {
-        if (this.sections == null) {
-            this.sections.set(0, section);
+        if (sections == null) {
+            sections.set(0, section);
             return;
         }
-        this.sections.add(section);
+        sections.add(section);
     }
 
     public int getId(Section section){

@@ -15,6 +15,10 @@ public class Item extends InventoryComponent {
     private String name, description;
     public String format = "%-40s%s%n";
 
+    @Override
+    public String implodeString() {
+        return this.getId()+","+this.getItem_id()+","+this.getName()+","+this.getDescription();
+    }
     public int getItem_id() {
         return item_id;
     }

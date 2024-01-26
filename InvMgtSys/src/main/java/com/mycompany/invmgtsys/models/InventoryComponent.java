@@ -2,6 +2,7 @@ package com.mycompany.invmgtsys.models;
 
 import java.util.ArrayList;
 import java.util.List;
+// import 
 
 // import java.util.ArrayList;
 // import java.util.List;
@@ -35,4 +36,8 @@ public abstract class InventoryComponent {
         System.out.println("This will return list attributes of the model");
         return new ArrayList<String>();
     }
+    // returns csv of Warehouse object
+    public abstract String implodeString();
+    // public abstract String readFile();
+    // public abstract void writeFile(String file);
 }

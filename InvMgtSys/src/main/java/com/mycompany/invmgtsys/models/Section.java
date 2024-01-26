@@ -18,6 +18,15 @@ public class Section extends InventoryComponent {
     private String aisle_name;
     private List<StorageBin> storage_bins;
 
+    @Override
+    public String implodeString() {
+        return  this.getId()+","+
+                this.getAisleName()+","+
+                this.getMaxCapacity()+","+
+                this.getCurrentCapacity()+","+
+                this.getWarehouseId()+","+
+                this.getShelfNumber();
+    }
     public String format = "%-40s%s%n";
 
     @Override
@@ -27,7 +36,6 @@ public class Section extends InventoryComponent {
         System.out.printf(format, "Aisle Name :", this.getAisleName());
         System.out.printf(format, "Max. Capacity : ", this.getMaxCapacity());
         System.out.printf(format, "Current Capacity : ", this.getCurrentCapacity());
-        System.out.printf(format, "Maximum Capacity : ", this.getMaxCapacity());
         System.out.printf(format, "Storage Bins Count : ",
                 (this.getStorageBins() != null ? this.getStorageBins().size() : 0));
     }

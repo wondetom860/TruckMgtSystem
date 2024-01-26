@@ -1,9 +1,5 @@
 package com.mycompany.invmgtsys.app;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,11 +9,13 @@ import com.mycompany.invmgtsys.repository.SectionRepository;
 // import com.mycompany.invmgtsys.repository.StorageBinRepository;
 import com.mycompany.invmgtsys.repository.WarehouseRepository;
 import com.mycompany.invmgtsys.services.InventoryService;
+import com.mycompany.invmgtsys.utility.*;
 
 public class InventoryManager {
     InventoryService inventoryService = new InventoryService();
     InventoryComponent ic;
     Scanner sc = new Scanner(System.in);
+    String fDBPath = "C:/Users/wonde/Documents/NetBeansProjects/InvMgtSys/src/main/java/com/mycompany/invmgtsys/models/fDB";
 
     public void startManager() {
         while (true) {
@@ -27,19 +25,25 @@ public class InventoryManager {
             print("Press 1 to Register Warehouse");
             print("Press 11 to Register Warehouse Bulk: ");
             print("Press 2 to Register Section");
-            print("Press 3 to Register Item\n");
+            print("Press 3 to Register Item");
             print("Press 7 to Register Storage Bin\n");
+
             print("Press 4 to Display All Warehouses");
             print("Press 5 to Display All Sections");
             print("Press 55 to Display All Sections by Warehouse");
-            print("Press 6 to Display All Items\n");
-            print("Press 77 to Store Warehouse to file");
             print("Press 8 to Display All Storage Bins");
-            // print("Press 9 to Store Item to file\n");
+            print("Press 6 to Display All Items\n");
+
+            print("Press 77 to Read Warehouse from file");
+            print("Press 78 to Read Sections from file\n");
+
+            print("Press 9 to Store Warehouse to file");
+            print("Press 99 to Store Sections to file\n");
+
             print("Enter 10 to Update WareHouse record");
-            print("Enter 11 to Update Section record");
-            print("Enter 12 to Update Item record\n");
-            print("Press 13 to Update Storage Bin");
+            print("Enter 101 to Update Section record");
+            print("Enter 12 to Update Item record");
+            print("Press 13 to Update Storage Bin\n");
             print("Press 0 to quite\n\nChoice: ");
 
             // if (!(sc.hasNextInt())) {// check if the input has int
@@ -81,14 +85,26 @@ public class InventoryManager {
                     case 13 -> {
                         updateStorageBin(sc);
                     }
+                    case 101 -> {
+                        updateSectionRecord(sc);
+                    }
                     case 10 -> {
                         updateWarehouseRecord(sc);
                     }
                     case 77 -> {
                         warehousesDataSplitted(sc);
                     }
+                    case 78 -> {
+                        sectionsDataSplitted(sc);
+                    }
                     case 7 -> {
                         registerStorageBin(sc);
+                    }
+                    case 9 -> {
+                        writeWarehouseStringToFile(sc);
+                    }
+                    case 99 -> {
+                        writeSectionStringToFile(sc);
                     }
                     case 0 ->
                         System.exit(0);
@@ -100,24 +116,44 @@ public class InventoryManager {
         }
     }
 
-    public void warehousesDataSplitted(Scanner sc) {
-        String path = "warehouse.csv";
-        List<Warehouse> warehouses = inventoryService.getAllWarehouses();
-        if (warehouses.size() > 0) {
-            try {
-                FileReader fileReader = new FileReader(path);
-                BufferedReader bfreader = new BufferedReader(fileReader);
+    public void writeSectionStringToFile(Scanner sc) {
+        WriteFile wf = new WriteFile();
+        String path = fDBPath + "/section.csv";
+        wf.writeSectionFile(inventoryService.getAllSections(), path);
+    }
 
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        } else {
-            print("Warehouse list empty!");
+    public void sectionsDataSplitted(Scanner sc) {
+        ReadFile rf = new ReadFile();
+        String path = fDBPath + "/section.csv";
+        List<Section> sections = rf.readFileSections(path);
+        for(Section s: sections){
+
+            Warehouse w = inventoryService.getWarehouseById(s.getWarehouseId());
+            inventoryService.addSection(s, w);
         }
+        //new SectionRepository(sections);
+        // SectionRepository.sections = sections;
+    }
+
+    public void writeWarehouseStringToFile(Scanner sc) {
+        WriteFile wf = new WriteFile();
+        String path = fDBPath + "/warehouse.csv";
+        wf.writeWaRehouseFile(inventoryService.getAllWarehouses(), path);
+    }
+
+    public void warehousesDataSplitted(Scanner sc) {
+        ReadFile rf = new ReadFile();
+        String path = fDBPath + "/warehouse.csv";
+        List<Warehouse> warehouses = rf.readFilWarehouses(path);
+        WarehouseRepository.warehouses = warehouses;
     }
 
     public void printInventoryComponent(InventoryComponent ic) {
         ic.display();
+    }
+
+    public void updateSectionRecord(Scanner sc) {
+        //
     }
 
     public void updateStorageBin(Scanner sc) {

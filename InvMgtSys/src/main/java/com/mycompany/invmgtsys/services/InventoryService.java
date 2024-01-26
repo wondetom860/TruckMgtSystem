@@ -77,6 +77,7 @@ public class InventoryService {
 
     public List<Section> getAllSections() {
         List<Section> allSections = new ArrayList<Section>();
+        //allSections = SectionRepository.sections;
         for (Warehouse w : this.getAllWarehouses()) {
             allSections.addAll(w.getSections());
         }
