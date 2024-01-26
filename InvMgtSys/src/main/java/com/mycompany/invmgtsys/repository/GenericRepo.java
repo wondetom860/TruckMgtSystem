@@ -3,7 +3,7 @@ package com.mycompany.invmgtsys.repository;
 import java.util.List;
 
 import com.mycompany.invmgtsys.models.InventoryComponent;
-import com.mycompany.invmgtsys.models.Warehouse;
+// import com.mycompany.invmgtsys.models.Warehouse;
 
 // import com.mycompany.invmgtsys.models.Item;
 

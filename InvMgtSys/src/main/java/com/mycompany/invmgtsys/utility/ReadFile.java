@@ -5,26 +5,81 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+// import java.util.Scanner;
 import java.util.Scanner;
 
 import com.mycompany.invmgtsys.models.*;
 
 public class ReadFile {
     public static void main(String[] args) {
-        // InventoryManager inventoryManager = new InventoryManager();
-        // // InventoryService inventoryService = new InventoryService();
-        // String path =
-        // "C:/Users/wonde/Documents/NetBeansProjects/InvMgtSys/src/main/java/com/mycompany/invmgtsys/app/File/warehouse.csv";
-        // List<Warehouse> warehouses = readFilWarehouses(path);
-        // WarehouseRepository.warehouses = warehouses;
-        // // initiate inventory manager
-        // inventoryManager.startManager();
-        // for (Warehouse warehouse : warehouses) {
-        // System.out.println("_________________________________________");
-        // warehouse.display();
-        // // inventoryService.addWarehouse(warehouse);
-        // }
-        // System.out.println("___________________________________________");
+        //
+    }
+
+    // Storage Bin
+    public List<Item> readFileItemss(String path) {
+        List<Item> items = new ArrayList<Item>();
+        try {
+            FileReader fileReader = new FileReader(path);
+            try (BufferedReader bfreader = new BufferedReader(fileReader)) {
+                String texString = bfreader.readLine();
+                while (texString != null) {
+                    Item item = extractItem(texString);
+                    items.add(item);
+                    texString = bfreader.readLine();
+                }
+                Scanner sc = new Scanner(System.in);
+                sc.nextLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return items;
+    }
+
+    public Item extractItem(String text) {
+        String[] itemData = text.split(",");
+        Item item = new Item();
+        item.setId(Integer.parseInt(itemData[0]));
+        item.setName(itemData[1]);
+        item.setDescription(itemData[2]);
+        return item;
+    }
+
+    // Storage Bin
+    public List<StorageBin> readFileSbins(String path) {
+        List<StorageBin> storageBins = new ArrayList<StorageBin>();
+        try {
+            FileReader fileReader = new FileReader(path);
+            try (BufferedReader bfreader = new BufferedReader(fileReader)) {
+                // System.out.println("Read file...");
+                String texString = bfreader.readLine();
+                while (texString != null) {
+                    StorageBin storageBin = extractSbin(texString);
+                    // storageBin.display();
+                    // System.out.println("________________________________________");
+                    storageBins.add(storageBin);
+                    texString = bfreader.readLine();
+                }
+                Scanner sc = new Scanner(System.in);
+                sc.nextLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return storageBins;
+    }
+
+    public StorageBin extractSbin(String text) {
+        String[] sbinData = text.split(",");
+        StorageBin sbin = new StorageBin();
+        sbin.setId(Integer.parseInt(sbinData[0]));
+        sbin.setSectionId(Integer.parseInt(sbinData[1]));
+        sbin.setItemId(Integer.parseInt(sbinData[2]));
+        sbin.setQuantity(Integer.parseInt(sbinData[3]));
+        sbin.setMaxCapacity(Integer.parseInt(sbinData[4]));
+        sbin.setShelfNumber(Integer.parseInt(sbinData[5]));
+
+        return sbin;
     }
 
     // Section
@@ -37,11 +92,10 @@ public class ReadFile {
                 while (texString != null) {
                     Section section = extractSection(texString);
                     sections.add(section);
-                    section.display();
                     texString = bfreader.readLine();
                 }
-                Scanner sc = new Scanner(System.in);
-                sc.nextLine();
+                // Scanner sc = new Scanner(System.in);
+                // sc.nextLine();
             }
         } catch (IOException e) {
             e.printStackTrace();

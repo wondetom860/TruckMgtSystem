@@ -4,7 +4,7 @@
  */
 package com.mycompany.invmgtsys.services;
 
-import java.lang.reflect.Array;
+// import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +53,17 @@ public class InventoryService {
         this.updateWarehouse(warehouse);
     }
 
+    public Section getSectionById2(int sectionId) {
+        
+        for (Section section : getAllSections()) {
+            if (section.getId() == sectionId) {
+                return section;
+            }
+        }
+
+        return null;
+    }
+
     public Section getSectionById(int sectionId, Warehouse warehouse) {
         SectionRepository sr = new SectionRepository(warehouse.getSections());
         return sr.getSectionById(sectionId);
@@ -77,7 +88,7 @@ public class InventoryService {
 
     public List<Section> getAllSections() {
         List<Section> allSections = new ArrayList<Section>();
-        //allSections = SectionRepository.sections;
+        // allSections = SectionRepository.sections;
         for (Warehouse w : this.getAllWarehouses()) {
             allSections.addAll(w.getSections());
         }
@@ -151,12 +162,11 @@ public class InventoryService {
         }
     }
 
-
     // Item
     // public int[] getItemWarehouseIds(int item_id){
-    //     // int[] itemWarehouseIds = new Array();
+    // // int[] itemWarehouseIds = new Array();
 
-    //     return new Integer();
+    // return new Integer();
     // }
     public Item getItemById(int Item_id) {
         return itemRepo.getItemById(Item_id);

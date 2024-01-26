@@ -17,7 +17,9 @@ public class Item extends InventoryComponent {
 
     @Override
     public String implodeString() {
-        return this.getId()+","+this.getItem_id()+","+this.getName()+","+this.getDescription();
+        return this.getId()+","
+            +this.getName()+","
+            +this.getDescription();
     }
     public int getItem_id() {
         return item_id;

@@ -2,7 +2,6 @@ package com.mycompany.invmgtsys.app;
 
 // import com.mycompany.invmgtsys.models.*;
 // import com.mycompany.invmgtsys.models.Warehouse;
-
 // import java.util.Scanner;
 // import TruckMgtSystem.InvMgtSys.src.main.java.com.mycompany.invmgtsys.services.*;
 // import TruckMgtSystem.InvMgtSys.src.main.java.com.mycompany.invmgtsys.models.*;

@@ -23,9 +23,9 @@ public class Warehouse extends InventoryComponent implements Cloneable {
         this.sections.add(section);
     }
 
-    public String implodeString(){
+    public String implodeString() {
 
-        return this.getId()+","+this.getLocation()+","+this.getMaxCapacity()+","+this.getCurrentQuantity();
+        return this.getId() + "," + this.getLocation() + "," + this.getMaxCapacity() + "," + this.getCurrentQuantity();
     }
 
     @Override
@@ -33,7 +33,7 @@ public class Warehouse extends InventoryComponent implements Cloneable {
         return this.getWarehouseId();
     }
 
-    public static int getId(Warehouse wh){
+    public static int getId(Warehouse wh) {
         return wh.getWarehouseId();
     }
 
@@ -191,12 +191,12 @@ public class Warehouse extends InventoryComponent implements Cloneable {
 
     // @Override
     // public String readFile() {
-        
+
     // }
 
     // @Override
     // public void writeFile(String file) {
-    //     // TODO Auto-generated method stub
-    //     throw new UnsupportedOperationException("Unimplemented method 'writeFile'");
+    // // TODO Auto-generated method stub
+    // throw new UnsupportedOperationException("Unimplemented method 'writeFile'");
     // }
 }

@@ -34,11 +34,15 @@ public class InventoryManager {
             print("Press 8 to Display All Storage Bins");
             print("Press 6 to Display All Items\n");
 
-            print("Press 77 to Read Warehouse from file");
-            print("Press 78 to Read Sections from file\n");
-
             print("Press 9 to Store Warehouse to file");
-            print("Press 99 to Store Sections to file\n");
+            print("Press 99 to Store Sections to file");
+            print("Press 999 to Store Storage Bin to file");
+            print("Press 909 to Store Items to file\n");
+
+            print("Press 77 to Read Warehouse from file");
+            print("Press 78 to Read Sections from file");
+            print("Press 79 to Read Items from file");
+            print("Press 799 to Read Storage Bins from file\n");
 
             print("Enter 10 to Update WareHouse record");
             print("Enter 101 to Update Section record");
@@ -94,6 +98,12 @@ public class InventoryManager {
                     case 77 -> {
                         warehousesDataSplitted(sc);
                     }
+                    case 799 -> {
+                        sbinsDataSplitted();
+                    }
+                    case 79 -> {
+                        itemsDataSplitted();
+                    }
                     case 78 -> {
                         sectionsDataSplitted(sc);
                     }
@@ -106,6 +116,12 @@ public class InventoryManager {
                     case 99 -> {
                         writeSectionStringToFile(sc);
                     }
+                    case 999 -> {
+                        writeStorageBinStringToFile();
+                    }
+                    case 909 -> {
+                        writeItemStringToFile();
+                    }
                     case 0 ->
                         System.exit(0);
                 }
@@ -116,22 +132,80 @@ public class InventoryManager {
         }
     }
 
+    public void writeItemStringToFile() {
+        WriteFile wf = new WriteFile();
+        String path = fDBPath + "/item.csv";
+        wf.writeItemFile(inventoryService.getAllItems(), path);
+    }
+
+    public void writeStorageBinStringToFile() {
+        WriteFile wf = new WriteFile();
+        String path = fDBPath + "/sbin.csv";
+        wf.writeStorageBinFile(inventoryService.getAllStorageBins(), path);
+    }
+
     public void writeSectionStringToFile(Scanner sc) {
         WriteFile wf = new WriteFile();
         String path = fDBPath + "/section.csv";
         wf.writeSectionFile(inventoryService.getAllSections(), path);
     }
 
+    public void itemsDataSplitted() {
+        ReadFile rf = new ReadFile();
+        String path = fDBPath + "/item.csv";
+        List<Item> items = rf.readFileItemss(path);
+        StorageBin sbin = null;
+        for (Item item : items) {
+            for (StorageBin sBin : inventoryService.getAllStorageBins()) {
+                if (sBin.getItemId() == item.getId()) {
+                    sbin = sBin;
+                    break;
+                }
+            }
+            if (sbin != null) {
+                Section section = inventoryService.getSectionById2(sbin.getSectionId());
+                Warehouse w = inventoryService.getWarehouseById(section.getWarehouseId());
+                if (w != null) {
+                    inventoryService.addItem(item, sbin.getQuantity(), section, w);
+                }
+            }
+        }
+    }
+
+    public void sbinsDataSplitted() {
+        ReadFile rf = new ReadFile();
+        String path = fDBPath + "/sbin.csv";
+        List<StorageBin> sbins = rf.readFileSbins(path);
+        for (StorageBin s : sbins) {
+            s.display();
+            System.out.println("_________________________");
+            Section section = inventoryService.getSectionById2(s.getSectionId());
+            if (section != null) {
+                Warehouse w = inventoryService.getWarehouseById(section.getWarehouseId());
+                if (w != null) {
+                    System.out.println("Adding Sbin to list...");
+                    inventoryService.addStorageBin(s, section, w);
+                }
+            } else {
+                System.out.println("Section NULL at this point.");
+            }
+        }
+        System.out.println("Imported " + sbins.size() + " Sbin records from file.");
+        Scanner sc = new Scanner(System.in);
+        sc.nextLine();
+    }
+
     public void sectionsDataSplitted(Scanner sc) {
         ReadFile rf = new ReadFile();
         String path = fDBPath + "/section.csv";
         List<Section> sections = rf.readFileSections(path);
-        for(Section s: sections){
-
+        for (Section s : sections) {
             Warehouse w = inventoryService.getWarehouseById(s.getWarehouseId());
             inventoryService.addSection(s, w);
         }
-        //new SectionRepository(sections);
+        System.out.println("Imported " + sections.size() + " sections from file.");
+        sc.nextLine();
+        // new SectionRepository(sections);
         // SectionRepository.sections = sections;
     }
 

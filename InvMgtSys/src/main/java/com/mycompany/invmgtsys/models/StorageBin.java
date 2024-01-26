@@ -14,7 +14,12 @@ public class StorageBin extends InventoryComponent {
     private int bin_id, section_id, item_id, quantity, max_capacity, shelf_number;
     @Override
     public String implodeString() {
-        return this.getId()+","+this.getSectionId()+","+this.getItemId()+","+this.getQuantity()+","+this.getMaxCapacity()+","+this.getShelfNumber();
+        return  this.getId()+","
+                +this.getSectionId()+","
+                +this.getItemId()+","
+                +this.getQuantity()+","
+                +this.getMaxCapacity()+","
+                +this.getShelfNumber();
     }
     public String format = "%-40s%s%n";
     // public void display(StorageBin bin) {
@@ -105,11 +110,11 @@ public class StorageBin extends InventoryComponent {
 
     @Override
     public void display() {
-        System.out.printf(format, "Section ID: ", this.getSectionId());
-        System.out.printf(format, "Sbin ID: ", this.getId());
-        System.out.printf(format, "Item ID: ", this.getItemId());
-        System.out.printf(format, "Shelf Number: ", this.getShelfNumber());
-        System.out.printf(format, "Quantity: ", this.getQuantity());
-        System.out.printf(format, "Max Capacity: ", this.getMaxCapacity());
+        System.out.printf(format, "Section ID:\t", this.getSectionId());
+        System.out.printf(format, "Sbin ID:\t", this.getId());
+        System.out.printf(format, "Item ID:\t", this.getItemId());
+        System.out.printf(format, "Shelf Number:\t", this.getShelfNumber());
+        System.out.printf(format, "Quantity: \t", this.getQuantity());
+        System.out.printf(format, "Max Capacity:\t", this.getMaxCapacity());
     }
 }

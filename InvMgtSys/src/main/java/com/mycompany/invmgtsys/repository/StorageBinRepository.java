@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mycompany.invmgtsys.models.StorageBin;
-import com.mycompany.invmgtsys.models.Warehouse;
+// import com.mycompany.invmgtsys.models.Warehouse;
 
 /**
  *
