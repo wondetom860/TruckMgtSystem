@@ -87,6 +87,14 @@ public class InventoryService {
         return allSections;
     }
 
+    public List<Section> getASectionsDB() {
+        List<Section> allSection = new ArrayList<Section>();
+        SectionRepository sr = new SectionRepository(allSection);
+        allSection = sr.getAllSectionsDB();
+        sr = new SectionRepository(allSection);
+        return allSection;
+    }
+
     public List<Section> getAllSections() throws SQLException {
         List<Section> allSections = new ArrayList<Section>();
         // allSections = SectionRepository.sections;

@@ -416,8 +416,8 @@ public class InventoryManager {
             if (warehouse != null) {
                 Section section = new Section();
                 section.setWarehouseId(warehouse_id);
-                print("Section Id: ");
-                section.setSectionId((Integer.parseInt(sc.nextLine())));
+                // print("Section Id: ");
+                // section.setSectionId((Integer.parseInt(sc.nextLine())));
                 print("Aisle Name: ");
                 section.setAisleName(sc.nextLine());
                 print("Max Capacity: ");
@@ -425,6 +425,10 @@ public class InventoryManager {
                 print("Current Occupancy");
                 section.setCurrentCapacity(Integer.parseInt(sc.nextLine()));
 
+                print("Shelf Number");
+                section.setShelfNumber(Integer.parseInt(sc.nextLine()));
+
+                
                 inventoryService.addSection(section, warehouse);
 
             } else {
@@ -508,14 +512,18 @@ public class InventoryManager {
             sc.nextLine();
             Warehouse warehouse001 = new Warehouse();
 
-            System.out.println("Enter Warehouse ID : ");
-            warehouse001.setWarehouseId(sc.nextInt());
-            sc.nextLine();
+            // System.out.println("Enter Warehouse ID : ");
+            // warehouse001.setWarehouseId(sc.nextInt());
+            // sc.nextLine();
             System.out.println("Enter Warehouse Location : ");
             warehouse001.setLocation(sc.nextLine());
 
             System.out.println("Enter Warehouse Max Capacity : ");
             warehouse001.setMaxCapacity(sc.nextInt());
+            sc.nextLine();
+
+            System.out.println("Enter Current Quantity : ");
+            warehouse001.setCurrentQuantity(sc.nextInt());
             sc.nextLine();
 
             inventoryService.addWarehouse(warehouse001);

@@ -4,12 +4,15 @@
  */
 package com.mycompany.invmgtsys.repository;
 
+import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+
 import com.mycompany.invmgtsys.models.Warehouse;
 import com.mycompany.invmgtsys.utility.DBConnector;
 
@@ -21,7 +24,30 @@ public class WarehouseRepository {
     public static List<Warehouse> warehouses = new ArrayList<>();
 
     public void addWarehouse(Warehouse warehouse) {
-        warehouses.add(warehouse);
+        // first add to DB
+        String insertQuery = "INSERT INTO warehouse(location,currentQuantity,maxCapacity) values(?,?,?)";
+        Connection conn = DBConnector.getDBConnection();
+        try (PreparedStatement pStatement = conn.prepareStatement(insertQuery,1)) {
+            // pStatement.setInt(1, warehouse.getId());
+            pStatement.setString(1, warehouse.getLocation());
+            pStatement.setInt(2, warehouse.getCurrentQuantity());
+            pStatement.setInt(3, warehouse.getMaxCapacity());
+
+            pStatement.executeUpdate();
+            ResultSet rs = pStatement.getGeneratedKeys();
+            int key = rs.next() ? rs.getInt(1) : 0;
+
+            if (key != 0) {
+                warehouse.setWarehouseId(key);
+                warehouse.display();
+                warehouses.add(warehouse);
+                System.out.println("Insertion success");
+            } else {
+                System.out.println("Insertion failed.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     // public static Warehouse findWarehouse(int warehouse_id){
@@ -37,15 +63,65 @@ public class WarehouseRepository {
     }
 
     public Warehouse getWarehouseById(int id) {
-        for (Warehouse warehouse : warehouses) {
-            if (warehouse.getWarehouseId() == id) {
-                return warehouse;
+
+        // get warehouse by id from DB:
+        String queryString = "SELECT * from warehouse where warehouseId=?";
+        Warehouse whf = new Warehouse();
+        Connection conn = DBConnector.getDBConnection();
+        try {
+            PreparedStatement pStatement = conn.prepareStatement(queryString);
+            pStatement.setInt(1, id);
+            ResultSet rs = pStatement.executeQuery();
+            while (rs.next()) {
+                whf.setWarehouseId(rs.getInt(1));
+                whf.setLocation(rs.getString(2));
+                whf.setCapacity(rs.getInt(3));
+                whf.setCurrentQuantity(rs.getInt(3));
+                whf.setMaxCapacity(rs.getInt(4));
             }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
         }
-        return null;
+
+        return whf;
+
+        // for (Warehouse warehouse : warehouses) {
+        // if (warehouse.getWarehouseId() == id) {
+        // return warehouse;
+        // }
+        // }
+        // return null;
     }
 
-    public void updateWarehouse(Warehouse updatedWarehouse) {
+    protected int updateWarehouseDB(Warehouse warehouse) {
+        // DBConnector dbConnector = new DBConnector();
+        Connection conn = DBConnector.getDBConnection();
+        String queryString = "update warehouse set warehouseId=?,location=?,maxCapacity=?,currentQuantity=? where warehouseID=?";
+        try {
+            PreparedStatement pstmt = conn.prepareStatement(queryString);
+            pstmt.setInt(1, warehouse.getId());
+            pstmt.setString(2, warehouse.getLocation());
+            pstmt.setInt(3, warehouse.getMaxCapacity());
+            pstmt.setInt(4, warehouse.getCurrentQuantity());
+            pstmt.setInt(5, warehouse.getId());
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                System.out.println("Update success");
+            } else {
+                System.out.println("Update failed");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+
+    }
+
+    public int updateWarehouse(Warehouse updatedWarehouse) {
         // int updatedWarehouseId = updatedWarehouse.getWarehouseId();
         // Warehouse updatedWarehouseFound = this.getWarehouseById(updatedWarehouseId);
         // if(updatedWarehouseFound != null){
@@ -55,9 +131,11 @@ public class WarehouseRepository {
         for (int i = 0; i < warehouses.size(); i++) {
             if (warehouses.get(i).getWarehouseId() == updatedWarehouse.getWarehouseId()) {
                 warehouses.set(i, updatedWarehouse);
-                return;
+                return updateWarehouseDB(updatedWarehouse);
             }
         }
+
+        return 0;
     }
 
     public void deleteWarehouse(int warehouseId) {
@@ -81,7 +159,7 @@ public class WarehouseRepository {
     public List<Warehouse> readFromDb() throws SQLException {
         // DBConnector dbConnector = new DBConnector();
         Connection conn = DBConnector.getDBConnection();
-        // List <Warehouse> warehouses = new ArrayList<>();
+        List<Warehouse> warehouses2 = new ArrayList<>();
         if (conn != null) {
             String queryString = "SELECT * FROM warehouse";
             PreparedStatement stmt = conn.prepareStatement(queryString);
@@ -89,12 +167,13 @@ public class WarehouseRepository {
                 // stmt.setString(1, item_name);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
-                    Warehouse warehouse =new Warehouse();
+                    Warehouse warehouse = new Warehouse();
                     warehouse.setWarehouseId(rs.getInt(1));
                     warehouse.setLocation(rs.getString(2));
                     warehouse.setCapacity(rs.getInt(3));
+                    warehouse.setCurrentQuantity(rs.getInt(3));
                     warehouse.setMaxCapacity(rs.getInt(4));
-                    warehouses.add(warehouse);
+                    warehouses2.add(warehouse);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -102,7 +181,7 @@ public class WarehouseRepository {
                 stmt.close();
             }
         }
-
+        warehouses = warehouses2;
         return warehouses;
     }
 

@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import com.mycompany.invmgtsys.models.Section;
-import com.mycompany.invmgtsys.models.Warehouse;
+// import com.mycompany.invmgtsys.models.Warehouse;
 import com.mycompany.invmgtsys.utility.DBConnector;
 
 /**
@@ -19,18 +19,38 @@ import com.mycompany.invmgtsys.utility.DBConnector;
  * @author wonde
  */
 public class SectionRepository {
-    public static List<Section> sections = new ArrayList<>();
+    public List<Section> sections = new ArrayList<>();
 
     public SectionRepository(List<Section> sectionss) {// []
         sections = sectionss;
     }
 
     public void addSection(Section section) {
-        if (sections == null) {
-            sections.set(0, section);
-            return;
+        String insertQuery = "INSERT INTO section(warehouseId,aisleName,shelfNumber,maxCapacity,currentQuantity) values(?,?,?,?,?)";
+        Connection conn = DBConnector.getDBConnection();
+        try (PreparedStatement pStatement = conn.prepareStatement(insertQuery, 1)) {
+            // pStatement.setInt(1, warehouse.getId());
+            pStatement.setInt(1, section.getWarehouseId());
+            pStatement.setString(2, section.getAisleName());
+            pStatement.setInt(3, section.getShelfNumber());
+            pStatement.setInt(4, section.getMaxCapacity());
+            pStatement.setInt(5, section.getCurrentCapacity());
+
+            pStatement.executeUpdate();
+            ResultSet rs = pStatement.getGeneratedKeys();
+            int key = rs.next() ? rs.getInt(1) : 0;
+
+            if (key != 0) {
+                section.setWarehouseId(key);
+                section.display();
+                sections.add(section);
+                System.out.println("Insertion success");
+            } else {
+                System.out.println("Insertion failed.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        sections.add(section);
     }
 
     public int getId(Section section) {
@@ -72,7 +92,7 @@ public class SectionRepository {
 
     protected List<Section> readFromDb() {
         Connection conn = DBConnector.getDBConnection();
-        List<Section> warehouses = new ArrayList<>();
+        List<Section> sections2 = new ArrayList<>();
         if (conn != null) {
             String queryString = "SELECT * FROM section";
             try (PreparedStatement stmt = conn.prepareStatement(queryString)) {
@@ -87,7 +107,7 @@ public class SectionRepository {
                         section.setShelfNumber(rs.getInt(4));
                         section.setMaxCapacity(rs.getInt(5));
                         section.setCurrentCapacity(rs.getInt(6));
-                        sections.add(section);
+                        sections2.add(section);
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -99,12 +119,20 @@ public class SectionRepository {
                 e.printStackTrace();
             }
         }
+        // this.sections = sections;
+        return sections2;
+    }
 
-        return warehouses;
+    public List<Section> getAllSectionsDB(){
+        return this.readFromDb();
     }
 
     public List<Section> getAllSections() {
-        // return sections;
-        return this.readFromDb();
+
+        if (this.sections == null) {
+            this.readFromDb();
+        }
+        return sections;
+        // return this.readFromDb();
     }
 }
