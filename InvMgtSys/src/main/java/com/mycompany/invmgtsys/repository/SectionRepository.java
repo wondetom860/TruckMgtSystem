@@ -4,9 +4,15 @@
  */
 package com.mycompany.invmgtsys.repository;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import com.mycompany.invmgtsys.models.Section;
+import com.mycompany.invmgtsys.models.Warehouse;
+import com.mycompany.invmgtsys.utility.DBConnector;
 
 /**
  *
@@ -27,7 +33,7 @@ public class SectionRepository {
         sections.add(section);
     }
 
-    public int getId(Section section){
+    public int getId(Section section) {
         return section.getId();
     }
 
@@ -64,7 +70,41 @@ public class SectionRepository {
         }
     }
 
+    protected List<Section> readFromDb() {
+        Connection conn = DBConnector.getDBConnection();
+        List<Section> warehouses = new ArrayList<>();
+        if (conn != null) {
+            String queryString = "SELECT * FROM section";
+            try (PreparedStatement stmt = conn.prepareStatement(queryString)) {
+                try {
+                    // stmt.setString(1, item_name);
+                    ResultSet rs = stmt.executeQuery();
+                    while (rs.next()) {
+                        Section section = new Section();
+                        section.setSectionId(rs.getInt(1));
+                        section.setWarehouseId(rs.getInt(2));
+                        section.setAisleName(rs.getString(3));
+                        section.setShelfNumber(rs.getInt(4));
+                        section.setMaxCapacity(rs.getInt(5));
+                        section.setCurrentCapacity(rs.getInt(6));
+                        sections.add(section);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error: ");
+                e.printStackTrace();
+            }
+        }
+
+        return warehouses;
+    }
+
     public List<Section> getAllSections() {
-        return sections;
+        // return sections;
+        return this.readFromDb();
     }
 }

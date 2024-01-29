@@ -1,5 +1,6 @@
 package com.mycompany.invmgtsys.app;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -138,19 +139,19 @@ public class InventoryManager {
         wf.writeItemFile(inventoryService.getAllItems(), path);
     }
 
-    public void writeStorageBinStringToFile() {
+    public void writeStorageBinStringToFile() throws SQLException {
         WriteFile wf = new WriteFile();
         String path = fDBPath + "/sbin.csv";
         wf.writeStorageBinFile(inventoryService.getAllStorageBins(), path);
     }
 
-    public void writeSectionStringToFile(Scanner sc) {
+    public void writeSectionStringToFile(Scanner sc) throws SQLException {
         WriteFile wf = new WriteFile();
         String path = fDBPath + "/section.csv";
         wf.writeSectionFile(inventoryService.getAllSections(), path);
     }
 
-    public void itemsDataSplitted() {
+    public void itemsDataSplitted() throws SQLException {
         ReadFile rf = new ReadFile();
         String path = fDBPath + "/item.csv";
         List<Item> items = rf.readFileItemss(path);
@@ -172,7 +173,7 @@ public class InventoryManager {
         }
     }
 
-    public void sbinsDataSplitted() {
+    public void sbinsDataSplitted() throws SQLException {
         ReadFile rf = new ReadFile();
         String path = fDBPath + "/sbin.csv";
         List<StorageBin> sbins = rf.readFileSbins(path);
@@ -209,7 +210,7 @@ public class InventoryManager {
         // SectionRepository.sections = sections;
     }
 
-    public void writeWarehouseStringToFile(Scanner sc) {
+    public void writeWarehouseStringToFile(Scanner sc) throws SQLException {
         WriteFile wf = new WriteFile();
         String path = fDBPath + "/warehouse.csv";
         wf.writeWaRehouseFile(inventoryService.getAllWarehouses(), path);
@@ -525,7 +526,7 @@ public class InventoryManager {
         sc.nextLine();
     }
 
-    public void displayAllStorageBins() {
+    public void displayAllStorageBins() throws SQLException {
         if (!inventoryService.getAllStorageBins().isEmpty()) {
             print("______________________________________");
             for (StorageBin sbin : inventoryService.getAllStorageBins()) {
@@ -555,7 +556,7 @@ public class InventoryManager {
         item.display();
     }
 
-    public void showAllWareHouses() {
+    public void showAllWareHouses() throws SQLException {
         List<Warehouse> warehouses = inventoryService.getAllWarehouses();
         if (!warehouses.isEmpty()) {
             // ic.displayMultiple((List<InventoryComponent>)warehouses);
@@ -569,7 +570,7 @@ public class InventoryManager {
         }
     }
 
-    public void showAllSectionsByWarehouse(Scanner sc) {
+    public void showAllSectionsByWarehouse(Scanner sc) throws SQLException {
         int warehouse_id = Integer.parseInt(sc.nextLine());
         if (!inventoryService.getAllSectionsByWarehouse(warehouse_id).isEmpty()) {
             for (Section section : inventoryService.getAllSectionsByWarehouse(warehouse_id)) {
@@ -582,7 +583,7 @@ public class InventoryManager {
         }
     }
 
-    public void showAllSections() {
+    public void showAllSections() throws SQLException {
         if (!inventoryService.getAllSections().isEmpty()) {
             print("______________________________________");
             for (Section section : inventoryService.getAllSections()) {

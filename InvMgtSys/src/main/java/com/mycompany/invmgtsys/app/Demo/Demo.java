@@ -1,18 +1,50 @@
 package com.mycompany.invmgtsys.app.Demo;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import com.mycompany.invmgtsys.utility.*;
+
 public class Demo {
-    public static void main(String[] args) {
-        try {
-            System.out.println(5/0);
-            int[] nums = new int[] { 1, 2, 3, 4, 5 };
-            nums[7] = 18;
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println("Error: Something wrong happened." + e.getMessage());
-        } catch (ArithmeticException e) {
-            System.out.println("Error: Arithmatic exception happened." + e.getMessage());
-        }catch(Exception e){
-            System.out.println("Error: Arithmatic exception happened." + e.getMessage());
+    public static void main(String[] args) throws SQLException {
+        DBConnector dbConnector = new DBConnector();
+        Connection conn = dbConnector.getDBConnection();
+        if (conn != null) {
+            System.out.println("Connection Successfull, Connection string: " + conn);
+
+            String queryString = "SELECT * FROM warehouse";
+            PreparedStatement stmt = conn.prepareStatement(queryString);
+            try {
+                // stmt.setString(1, item_name);
+                ResultSet rs = stmt.executeQuery();
+                System.out.println("_____________________________________________");
+                while (rs.next()) {
+                    System.out.println("Warehouse ID: \t\t" + rs.getString(1));
+                    System.out.println("Location: \t\t" + rs.getString(2));
+                    System.out.println("Max Capacity: \t\t" + rs.getString(4));
+                    System.out.println("Current Capacity: \t" + rs.getString(3));
+                    System.out.println("_________________________________________________");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                stmt.close();
+            }
+        } else {
+            System.out.println("Connecting to MySQL server failed.");
         }
+        // try {
+        //     System.out.println(5/0);
+        //     int[] nums = new int[] { 1, 2, 3, 4, 5 };
+        //     nums[7] = 18;
+        // } catch (IndexOutOfBoundsException e) {
+        //     System.out.println("Error: Something wrong happened." + e.getMessage());
+        // } catch (ArithmeticException e) {
+        //     System.out.println("Error: Arithmatic exception happened." + e.getMessage());
+        // }catch(Exception e){
+        //     System.out.println("Error: Arithmatic exception happened." + e.getMessage());
+        // }
 
         // Rectangle rec = new Rectangle(55.5, 22.2);
         // System.out.println("Rectangle:\nSides: " + rec.getSides());

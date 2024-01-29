@@ -1,40 +1,48 @@
 package com.mycompany.invmgtsys.utility;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Properties;
 import java.sql.SQLException;
-// import com.mysql.jdbc.Driver;
 
 public class DBConnector {
+
     public static Connection conn = null;
 
-    public static void main(String[] args) {
-        getDBConnection();
-        System.out.println(conn);
+    public static void main(String[] args) throws SQLException {
+        // clearScreen();
+        // getDBConnection();
     }
 
-    static void getDBConnection() {
-        try {
+    public static Connection getDBConnection() {
+        try (FileInputStream f = new FileInputStream(
+                "./InvMgtSys/src/main/java/com/mycompany/invmgtsys/utility/db.properties")) {
             // This will load the MySQL driver, each DB has its own driver
-            Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://127.0.0.1:3306/inventorymanagement";
-            String user = "root";
-            String password = "WT_toma000";
+            Properties pro = new Properties();
+            pro.load(f);
+            Class.forName("com.mysql.cj.jdbc.Driver");
             // create a connection to the database
-            conn = DriverManager.getConnection(url, user, password);
-
-        } catch (Exception e) {
+            conn = DriverManager.getConnection(pro.getProperty("url"), pro.getProperty("user"),
+                    pro.getProperty("password"));
+        } catch (ClassNotFoundException | SQLException e) {
             System.out.println("Error:");
             System.out.println(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally {
-            // try {
-            //     if (conn != null) {
-            //         conn.close();
-            //     }
-
-            // } catch (SQLException ex) {
-            //     System.out.println(ex.getMessage());
-            // }
+            if (conn != null) {
+                System.out.println("::");
+            }
         }
+
+        return conn;
+    }
+
+    static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+
     }
 }

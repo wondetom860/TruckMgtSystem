@@ -4,6 +4,7 @@
  */
 package com.mycompany.invmgtsys.services;
 
+import java.sql.SQLException;
 // import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class InventoryService {
         warehouseRepo.updateWarehouse(updatedWarehouse);
     }
 
-    public List<Warehouse> getAllWarehouses() {
+    public List<Warehouse> getAllWarehouses() throws SQLException {
         return warehouseRepo.getAllWarehouses();
     }
 
@@ -53,8 +54,8 @@ public class InventoryService {
         this.updateWarehouse(warehouse);
     }
 
-    public Section getSectionById2(int sectionId) {
-        
+    public Section getSectionById2(int sectionId) throws SQLException {
+
         for (Section section : getAllSections()) {
             if (section.getId() == sectionId) {
                 return section;
@@ -76,7 +77,7 @@ public class InventoryService {
         this.updateWarehouse(warehouse);
     }
 
-    public List<Section> getAllSectionsByWarehouse(int warehosue_id) {
+    public List<Section> getAllSectionsByWarehouse(int warehosue_id) throws SQLException {
         List<Section> allSections = new ArrayList<Section>();
         for (Warehouse w : this.getAllWarehouses()) {
             if (w.getWarehouseId() == warehosue_id) {
@@ -86,7 +87,7 @@ public class InventoryService {
         return allSections;
     }
 
-    public List<Section> getAllSections() {
+    public List<Section> getAllSections() throws SQLException {
         List<Section> allSections = new ArrayList<Section>();
         // allSections = SectionRepository.sections;
         for (Warehouse w : this.getAllWarehouses()) {
@@ -131,7 +132,7 @@ public class InventoryService {
 
     }
 
-    public List<StorageBin> getAllStorageBins() {
+    public List<StorageBin> getAllStorageBins() throws SQLException {
         List<StorageBin> allStorageBins = new ArrayList<StorageBin>();
         for (Warehouse w : this.getAllWarehouses()) {
             for (Section s : w.getSections()) {

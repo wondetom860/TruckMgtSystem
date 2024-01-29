@@ -4,6 +4,7 @@
  */
 package com.mycompany.invmgtsys.models;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,7 +94,7 @@ public class Section extends InventoryComponent {
 
     // }
 
-    public int getWarehouseId(int section_id) {
+    public int getWarehouseId(int section_id) throws SQLException {
         WarehouseRepository whr = new WarehouseRepository();
         for (Warehouse warehouse : whr.getAllWarehouses()) {
             for (Section section : warehouse.getSections()) {
