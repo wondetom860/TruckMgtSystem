@@ -61,7 +61,6 @@ public class InventoryService {
                 return section;
             }
         }
-
         return null;
     }
 
@@ -96,12 +95,13 @@ public class InventoryService {
     }
 
     public List<Section> getAllSections() throws SQLException {
-        List<Section> allSections = new ArrayList<Section>();
-        // allSections = SectionRepository.sections;
-        for (Warehouse w : this.getAllWarehouses()) {
-            allSections.addAll(w.getSections());
-        }
-        return allSections;
+        return this.getASectionsDB();
+        // List<Section> allSections = new ArrayList<Section>();
+        // // allSections = SectionRepository.sections;
+        // for (Warehouse w : this.getAllWarehouses()) {
+        // allSections.addAll(w.getSections());
+        // }
+        // return allSections;
     }
 
     // StorageBin

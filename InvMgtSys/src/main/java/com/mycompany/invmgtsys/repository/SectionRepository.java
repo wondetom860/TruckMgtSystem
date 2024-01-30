@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+
 import com.mycompany.invmgtsys.models.Section;
 // import com.mycompany.invmgtsys.models.Warehouse;
 import com.mycompany.invmgtsys.utility.DBConnector;
@@ -91,6 +93,7 @@ public class SectionRepository {
     }
 
     protected List<Section> readFromDb() {
+        Scanner sc = new Scanner(System.in);
         Connection conn = DBConnector.getDBConnection();
         List<Section> sections2 = new ArrayList<>();
         if (conn != null) {
@@ -107,6 +110,7 @@ public class SectionRepository {
                         section.setShelfNumber(rs.getInt(4));
                         section.setMaxCapacity(rs.getInt(5));
                         section.setCurrentCapacity(rs.getInt(6));
+                        // section.display();
                         sections2.add(section);
                     }
                 } catch (SQLException e) {
@@ -118,12 +122,16 @@ public class SectionRepository {
                 System.out.println("Error: ");
                 e.printStackTrace();
             }
+        } else {
+            System.out.println("Connection to database failed.");
+            sc.nextLine();
         }
         // this.sections = sections;
+        // sc.nextLine();
         return sections2;
     }
 
-    public List<Section> getAllSectionsDB(){
+    public List<Section> getAllSectionsDB() {
         return this.readFromDb();
     }
 

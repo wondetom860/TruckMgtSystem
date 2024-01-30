@@ -45,6 +45,14 @@ public class Warehouse extends InventoryComponent implements Cloneable {
         this.location = location;
     }
 
+    public Warehouse(int capacity, int current_quantity, int max_capacity, String location) {
+        // this.warehouse_id = w_id;
+        this.capacity = capacity;
+        this.current_quantity = current_quantity;
+        this.max_capacity = max_capacity;
+        this.location = location;
+    }
+
     public Warehouse() {
     }
 
